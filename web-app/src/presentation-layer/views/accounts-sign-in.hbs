@@ -1,0 +1,27 @@
+<div class="error-center">
+    {{#if errors.length}}
+    <p>Could not login because:</p>
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
+</div>
+
+<div class="login-div">
+    <form class="login-form" action="/login" method="post">
+        <label for=""></label>
+        <input type="hidden" name="_csrf" value={{csrfToken}}>
+        <div class="field">
+            <div class="fas fa-envelope"></div>
+            <input type="text" placeholder="Username" name="username" required>
+        </div>
+        <div class="field">
+            <div class="fas fa-lock"></div>
+            <input type="password" placeholder="Password" name="password" required>
+        </div>
+        <a href="/accounts/sign-up">Sign up</a>
+        <button>LOGIN</button>
+    </form>
+</div>

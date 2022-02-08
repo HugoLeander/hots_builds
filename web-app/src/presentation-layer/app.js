@@ -1,39 +1,28 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const path = require('path')
-const mysql = require('mysql')
 
-const dbConnection = mysql.createConnection({
-    host: "database",
-    port: 3306,
-    user: "root",
-    password: "abc123",
-    database: "my-platform"
-})
+
+const variousRouter = require('./routers/various-router')
+const accountRouter = require('./routers/account-router')
+const RangedAssassinsRouter = require('./routers/rangedAssassins-router')
 
 const app = express()
 
-app.engine('hbs', expressHandlebars.engine({
-    defaultLayout: 'main.hbs'
-}))
-
 app.set('views', path.join(__dirname, "views"))
 
-app.get('/', function(request, response){
-    response.render('start.hbs')
+app.engine('hbs', expressHandlebars.engine({
+    extname: 'hbs',
+    defaultLayout: 'main.hbs',
+    layoutsDir: path.join(__dirname, 'layouts')
+}))
 
-    dbConnection.query("SELECT * FROM heroes", function(error, heroes){
-        if(error){
-            console.log(error)
-        } else{
-            console.log("Got heroes:")
-            for(const hero of heroes){
-                console.log(hero.name)
-            }
-        }
-    })
-})
+app.use(express.static(path.join(__dirname, 'public')))
+
+app.use('/', variousRouter)
+app.use('/accounts', accountRouter)
+app.use('/rangedAssassins', RangedAssassinsRouter)
 
 app.listen(8080, function(){
-    console.log("It's up and running")
+    console.log("Running on port 8080!")
 })

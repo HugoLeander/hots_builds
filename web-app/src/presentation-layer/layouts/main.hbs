@@ -5,11 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Platform</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
 
-    <h1>My Platform</h1>
+    <h1>Icy 2.0</h1>
 
+    <nav class="nav-bar">
+        <ul> 
+            <li> <a href="/">Start</a> </li>
+            <li> <a href="/tanks">Tanks</a> </li>
+            <li> <a href="/rangedAssassins">Ranged Assassins</a> </li>
+            <li> <a href="/meleeAssassins">Melee Assassins</a> </li>
+            <li> <a href="/bruisers">Bruisers</a> </li>
+            <li> <a href="/healers">Healers</a> </li>
+            <li> <a href="/supports">Supports</a> </li>
+            {{#if session.isLoggedIn}}
+            <li>
+                <form action="/log-out" method="post" class="log-out form">
+                <button type="submit" class="nav-button">Log out</button>
+                </form>
+            </li>
+            {{else}}
+            <li> <a href="/accounts/sign-in">Sign in</a> </li>
+            {{/if}}
+        </ul>
+    </nav>
     <main>
         {{{body}}}
     </main>
