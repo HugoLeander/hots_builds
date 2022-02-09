@@ -1,9 +1,11 @@
 const express = require('express')
 
+
 const router = express.Router()
 
 var csrf = require('csurf')
-va = csrf({ cookie: true})
+
+
 
 router.get('/', function(request,response){
 	response.render('rangedAssassins.hbs')
