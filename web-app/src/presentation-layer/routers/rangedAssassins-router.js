@@ -1,30 +1,24 @@
 const express = require('express')
-
-
 const router = express.Router()
-
-var csrf = require('csurf')
-
-
 
 router.get('/', function(request,response){
 	response.render('rangedAssassins.hbs')
 })
 
 router.get('/azmodan', function(request,response){
-	response.render('azmodan.hbs')
+    response.render('azmodan.hbs')
 })
 
 router.get('/cassia', function(request,response){
-	response.render('cassia.hbs')
+    response.render('cassia.hbs')
 })
 
 router.get('/chromie', function(request,response){
-	response.render('chromie.hbs')
+    response.render('chromie.hbs')
 })
 
 router.get('/falstad', function(request,response){
-	response.render('falstad.hbs')
+    response.render('falstad.hbs')
 })
 
 router.get('/fenix', function(request,response){
@@ -44,7 +38,7 @@ router.get('/greymane', function(request,response){
 })
 
 router.get('/guldan', function(request,response){
-	response.render('guldan.hbs')
+    response.render('guldan.hbs')
 })
 
 router.get('/hanzo', function(request,response){
@@ -108,27 +102,27 @@ router.get('/sylvanas', function(request,response){
 })
 
 router.get('/tassadar', function(request,response){
-	response.render('tassadar.hbs')
+    response.render('tassadar.hbs')
 })
 
 router.get('/tracer', function(request,response){
-	response.render('tracer.hbs')
+    response.render('tracer.hbs')
 })
 
 router.get('/tychus', function(request,response){
-	response.render('tychus.hbs')
+    response.render('tychus.hbs')
 })
 
 router.get('/valla', function(request,response){
-	response.render('valla.hbs')
+    response.render('valla.hbs')
 })
 
 router.get('/zagara', function(request,response){
-	response.render('zagara.hbs')
+    response.render('zagara.hbs')
 })
 
 router.get('/zuljin', function(request,response){
-	response.render('zuljin.hbs')
+    response.render('zuljin.hbs')
 })
 
 module.exports = router
