@@ -46,17 +46,17 @@ exports.getAccountByUsername = function (username, callback) {
 	Possible errors: databaseError, usernameTaken
 	Success value: The id of the new account.
 */
-exports.createAccount = function (account, callback) {
+exports.createAccount = function (newUser, callback) {
 
 	const query = `INSERT INTO accounts (username, password) VALUES (?, ?)`
-	const values = [account.username, account.password]
+	const values = [newUser.username, newUser.password]
 
-	db.query(query, values, function (error, results) {
+	db.query(query, values, function (error, newUser) {
 		if (error) {
 			// TODO: Look for usernameUnique violation.
 			callback(['databaseError'], null)
 		} else {
-			callback([], results.insertId)
+			callback([], newUser)
 		}
 	})
 

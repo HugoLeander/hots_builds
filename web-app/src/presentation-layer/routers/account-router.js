@@ -3,8 +3,7 @@ const accountManager = require('../../business-logic-layer/account-manager')
 const dbConnection = require('../../data-access-layer/db')
 
 const router = express.Router()
-
-
+router.use(express.urlencoded({ extended: false}))
 
 router.get("/sign-in", function(request, response){
 	response.render("accounts-sign-in.hbs")
@@ -26,15 +25,21 @@ router.get("/sign-up", function(request, response){
 
 router.post("/sign-up", function(request, response){
 	
-	const username = request.params.username
-	const password = request.params.password
+	const newUser = {
+		username: request.body.username,
+		password: request.body.password,
+		confirm_password: request.body.confirm_password
+	}
+	
 
-	accountManager.createAccount(username, password, function(account, errors){
-		const model = {
-			errors: errors,
-			account: account
+	accountManager.createAccount(newUser, function(errors, user){
+		
+		if(0 < errors.lenght){
+			console.log(errors)
+		} else {
+			console.log(user)
+			response.redirect("/")
 		}
-		response.render("accounts-sign-up.hbs", model)
 	})
 })
 

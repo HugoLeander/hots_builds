@@ -368,7 +368,48 @@ td{
   font-weight: 500;
 }
 
+.signUp_button, form button{
+  margin-top: 0px;
+  color: white;
+  height: 50px;
+  width: 100%;
+  outline: none;
+  padding: 0 15px;
+  border-radius: 0 5px 5px 0;
+  border: none;
+  caret-color: #339933;
+  background: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
 
+.signUp_button{
+  height: 50px;
+  width: 100%;
+  outline: none;
+  font-size: 19px;
+  color: #868686;
+  padding: 0 15px;
+  border-radius: 0 5px 5px 0;
+  border: 1px solid #444;
+  caret-color: #339933;
+  background: linear-gradient(#333,#222);
+}
+.signUp_button{
+  margin-top: 30px;
+  border-radius: 5px!important;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.signUp_button:hover{
+  color: #339933;
+  border: 1px solid #339933;
+  box-shadow: 0 0 5px rgba(0,255,0,.3),
+              0 0 10px rgba(0,255,0,.2),
+              0 0 15px rgba(0,255,0,.1),
+              0 2px 0 black;
+}
 
 
 

@@ -13,16 +13,16 @@
     <form class="login-form" action="/accounts/sign-up" method="post">
         <div class="field">
             <div class="fas fa-envelope"></div>
-            <input type="text" placeholder="Username" name="username" required>
+            <input type="text" placeholder="Username" name="username" id="username" required>
         </div>
         <div class="field">
             <div class="fas fa-lock"></div>
-            <input type="password" placeholder="Password" name="password" required>
+            <input type="password" placeholder="Password" name="password" id="password" required>
         </div>
         <div class="field">
             <div class="fas fa-lock"></div>
-            <input type="password" placeholder="Confirm Password" name="confirm_password" required>
+            <input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
         </div>
-        <button>Sign up</button>
+        <input type="submit" class="signUp_button" role="button" value="Sign up">
     </form>
 </div>
