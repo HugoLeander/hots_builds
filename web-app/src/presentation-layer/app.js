@@ -23,6 +23,11 @@ app.use(expressSession({
 	cookie: {maxAge: oneHour},
 }));
 
+app.use(function (request, response, next) {
+	//Makes the session available to all views.
+	response.locals.session = request.session
+	next()
+})
 
 app.set('views', path.join(__dirname, "views"))
 
@@ -42,6 +47,7 @@ app.use('/meleeAssassins', meleeAssassinsRouter)
 app.use('/bruisers', bruisersRouter)
 app.use('/healers', healersRouter)
 app.use('/supports', supportsRouter)
+
 
 app.listen(8080, function(){
     console.log("Running on port 8080!")

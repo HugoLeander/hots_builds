@@ -10,7 +10,7 @@
 </div>
 
 <div class="login-div">
-    <form class="login-form" action="/login" method="post">
+    <form class="login-form" action="/accounts/sign-in" method="post">
         <label for=""></label>
         <input type="hidden" name="_csrf" value={{csrfToken}}>
         <div class="field">
@@ -22,6 +22,6 @@
             <input type="password" placeholder="Password" name="password" required>
         </div>
         <a href="/accounts/sign-up" class="sign-up">Sign up</a>
-        <button>LOGIN</button>
+        <input type="submit" class="signUp_button" role="button" value="Sign In">
     </form>
 </div>

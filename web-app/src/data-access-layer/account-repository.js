@@ -25,10 +25,10 @@ exports.getAllAccounts = function (callback) {
 	Possible errors: databaseError
 	Success value: The fetched account, or null if no account has that username.
 */
-exports.getAccountByUsername = function (username, callback) {
+exports.getAccountByUsername = function (user, callback) {
 
 	const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
-	const values = [username]
+	const values = [user.username]
 
 	db.query(query, values, function (error, accounts) {
 		if (error) {
@@ -37,7 +37,6 @@ exports.getAccountByUsername = function (username, callback) {
 			callback([], accounts[0])
 		}
 	})
-
 }
 
 /*

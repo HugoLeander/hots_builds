@@ -1,3 +1,4 @@
+const { response } = require('express')
 const accountRepository = require('../data-access-layer/account-repository')
 
 const MIN_USERNAME_LENGTH = 3
@@ -6,7 +7,6 @@ const MAX_USERNAME_LENGTH = 10
 exports.getErrorsNewAccount = function(newUser, callback){
 	
 	const errors = []
-	
 
 	console.log(newUser)
 	// Validate username.
@@ -25,14 +25,14 @@ exports.getErrorsNewAccount = function(newUser, callback){
 		errors.push("Passwords don't match")
 		console.log("passwords dont match")
 	}
-	accountRepository.createAccount(newUser, function(errors, newUser){
+	accountRepository.createAccount(newUser, function(error, newUser){
 
 		if(errors.length > 0){
 			console.log(errors)
 		}
 		else {
 			callback(errors, newUser)
+			console.log("skickade till repository")
 		}
 	})
-	console.log("skickade till repository")	
 }

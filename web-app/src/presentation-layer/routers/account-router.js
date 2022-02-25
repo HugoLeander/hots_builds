@@ -19,6 +19,28 @@ router.get("/", function(request, response){
 	})
 })
 
+router.post("/sign-in", function(request, response){
+	const user = {
+		username: request.body.username,
+		password: request.body.password
+	}
+
+	accountManager.getAccountByUsername(user, function(errors, userGotBack){
+
+		const model = {
+			errors: errors
+		}
+		if(user.password == userGotBack.password){
+			request.session.isLoggedIn = true
+			response.redirect('/')
+			console.log("Successfull login")
+		} else {
+			response.render("accounts-sign-up.hbs", model)
+			console.log("could not login")
+		}
+	})
+})
+
 router.get("/sign-up", function(request, response){
 	response.render("accounts-sign-up.hbs")
 })
@@ -31,11 +53,15 @@ router.post("/sign-up", function(request, response){
 		confirm_password: request.body.confirm_password
 	}
 	
-
 	accountManager.createAccount(newUser, function(errors, user){
 		
-		if(0 < errors.lenght){
+		const model = {
+			errors: errors
+		}
+
+		if(errors.lenght > 0){
 			console.log(errors)
+			response.render('accounts-sign-up.hbs', model)
 		} else {
 			console.log(user)
 			response.redirect("/")
@@ -56,5 +82,11 @@ router.get('/:username', function(request, response){
 		response.render("accounts-show-one.hbs", model)
 	})
 })
+router.post('/log-out', async function(request, response){
+	request.session.isLoggedIn = false
+	response.redirect('/')
+    console.log("Logged out")
+})
+
 
 module.exports = router

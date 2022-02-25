@@ -9,6 +9,6 @@ exports.createAccount = function(newUser, callback){
 	accountValidator.getErrorsNewAccount(newUser, callback)	
 }
 
-exports.getAccountByUsername = function(username, callback){
-	accountRepository.getAccountByUsername(username, callback)
+exports.getAccountByUsername = function(user, callback){
+	accountRepository.getAccountByUsername(user, callback)
 }
