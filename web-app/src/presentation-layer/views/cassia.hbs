@@ -88,7 +88,7 @@
     <div class="main-layout">
         <h1> Reviews </h1>
 
-        <a href="/reviews/create">Add new Review</a>
+        <a href="/reviews">Add new Review</a>
 
         {{#if hasDatabaseError}}
         <p>Couldn't fetch the reviews at the moment, try again later.</p>
@@ -98,8 +98,9 @@
 
         {{#each reviews}}
         <article>
-            <h2>{{name}}</h2>
-            <p>Rating: {{rating}}</p>
+            <h2>{{heroesName}}</h2>
+            <h3>{{name}}</h3>
+            <p>Rating: {{rating}} out of 5</p>
             <p>Description: {{description}}</p>
             <a href="/reviews/{{id}}">Read more</a>
         </article>

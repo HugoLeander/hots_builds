@@ -64,7 +64,7 @@ router.post("/sign-up", function(request, response){
 			response.render('accounts-sign-up.hbs', model)
 		} else {
 			console.log(user)
-			response.redirect("/")
+			response.redirect("/sign-in")
 		}
 	})
 })
@@ -82,6 +82,7 @@ router.get('/:username', function(request, response){
 		response.render("accounts-show-one.hbs", model)
 	})
 })
+
 router.post('/log-out', async function(request, response){
 	request.session.isLoggedIn = false
 	response.redirect('/')

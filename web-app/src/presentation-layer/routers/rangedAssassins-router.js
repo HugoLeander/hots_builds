@@ -1,127 +1,149 @@
 const express = require('express')
 const router = express.Router()
+const reviewManager = require('../../business-logic-layer/review-manager')
 
-router.get('/', function(request,response){
+router.get('/', function(request, response){
 	response.render('rangedAssassins.hbs')
 })
 
-router.get('/azmodan', function(request,response){
-    response.render('azmodan.hbs')
+router.get('/azmodan', function(request, response){
+    const heroesName = "Azmodan"
+    reviewManager.getAllReviewsByName(heroesName, function(errors, reviews){
+		const model = {
+			errors: errors,
+			reviews: reviews
+		}
+        response.render('azmodan.hbs', model)
+	})
 })
 
-router.get('/cassia', function(request,response){
-    response.render('cassia.hbs')
+router.get('/cassia', function(request, response){
+    const heroesName = "Cassia"
+    reviewManager.getAllReviewsByName(heroesName, function(errors, reviews){
+		const model = {
+			errors: errors,
+			reviews: reviews
+		}
+		response.render('cassia.hbs', model)
+	})
 })
 
-router.get('/chromie', function(request,response){
-    response.render('chromie.hbs')
+router.get('/chromie', function(request, response){
+    const heroesName = "Chromie"
+    reviewManager.getAllReviewsByName(heroesName, function(errors, reviews){
+		const model = {
+			errors: errors,
+			reviews: reviews
+		}
+        response.render('chromie.hbs', model)
+	})
 })
 
-router.get('/falstad', function(request,response){
+router.get('/falstad', function(request, response){
     response.render('falstad.hbs')
 })
 
-router.get('/fenix', function(request,response){
+router.get('/fenix', function(request, response){
 	response.render('fenix.hbs')
 })
 
-router.get('/gall', function(request,response){
+router.get('/gall', function(request, response){
     response.render('gall.hbs')
 })
 
-router.get('/genji', function(request,response){
+router.get('/genji', function(request, response){
     response.render('genji.hbs')
 })
 
-router.get('/greymane', function(request,response){
+router.get('/greymane', function(request, response){
     response.render('greymane.hbs')
 })
 
-router.get('/guldan', function(request,response){
+router.get('/guldan', function(request, response){
     response.render('guldan.hbs')
 })
 
-router.get('/hanzo', function(request,response){
+router.get('/hanzo', function(request, response){
     response.render('hanzo.hbs')
 })
 
-router.get('/jaina', function(request,response){
+router.get('/jaina', function(request, response){
     response.render('jaina.hbs')
 })
 
-router.get('/junkrat', function(request,response){
+router.get('/junkrat', function(request, response){
     response.render('junkrat.hbs')
 })
 
-router.get('/kaelthas', function(request,response){
+router.get('/kaelthas', function(request, response){
     response.render('kaelthas.hbs')
 })
 
-router.get('/kelthuzad', function(request,response){
+router.get('/kelthuzad', function(request, response){
     response.render('kelthuzad.hbs')
 })
 
-router.get('/liming', function(request,response){
+router.get('/liming', function(request, response){
     response.render('liming.hbs')
 })
 
-router.get('/lunara', function(request,response){
+router.get('/lunara', function(request, response){
     response.render('lunara.hbs')
 })
 
-router.get('/mephisto', function(request,response){
+router.get('/mephisto', function(request, response){
     response.render('mephisto.hbs')
 })
 
-router.get('/nazeebo', function(request,response){
+router.get('/nazeebo', function(request, response){
     response.render('nazeebo.hbs')
 })
 
-router.get('/nova', function(request,response){
+router.get('/nova', function(request, response){
     response.render('nova.hbs')
 })
 
-router.get('/orphea', function(request,response){
+router.get('/orphea', function(request, response){
     response.render('orphea.hbs')
 })
 
-router.get('/probius', function(request,response){
+router.get('/probius', function(request, response){
     response.render('probius.hbs')
 })
 
-router.get('/raynor', function(request,response){
+router.get('/raynor', function(request, response){
     response.render('raynor.hbs')
 })
 
-router.get('/sgthammer', function(request,response){
+router.get('/sgthammer', function(request, response){
     response.render('sgthammer.hbs')
 })
 
-router.get('/sylvanas', function(request,response){
+router.get('/sylvanas', function(request, response){
     response.render('sylvanas.hbs')
 })
 
-router.get('/tassadar', function(request,response){
+router.get('/tassadar', function(request, response){
     response.render('tassadar.hbs')
 })
 
-router.get('/tracer', function(request,response){
+router.get('/tracer', function(request, response){
     response.render('tracer.hbs')
 })
 
-router.get('/tychus', function(request,response){
+router.get('/tychus', function(request, response){
     response.render('tychus.hbs')
 })
 
-router.get('/valla', function(request,response){
+router.get('/valla', function(request, response){
     response.render('valla.hbs')
 })
 
-router.get('/zagara', function(request,response){
+router.get('/zagara', function(request, response){
     response.render('zagara.hbs')
 })
 
-router.get('/zuljin', function(request,response){
+router.get('/zuljin', function(request, response){
     response.render('zuljin.hbs')
 })
 

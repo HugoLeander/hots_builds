@@ -13,3 +13,8 @@ services:
       MYSQL_DATABASE: "my-platform"
     ports:
       - "3306:3306"
+  # "redis":
+  #   container_name: "redis"
+  #   image: redis:alpine
+  #   ports:
+  #   - "6379:6379"

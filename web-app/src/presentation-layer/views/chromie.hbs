@@ -33,7 +33,8 @@
                     <img src="/images/talents-copy/chromie/storm_ui_icon_chromie_timetrap_b.png" alt="multiple traps">
                 </a>
                 <a class="heroes_build_talent_tier_situational" href="/">
-                    <img src="/images/talents-copy/chromie/storm_ui_icon_chromie_timetrap.png" alt="movement speed trap">
+                    <img src="/images/talents-copy/chromie/storm_ui_icon_chromie_timetrap.png"
+                        alt="movement speed trap">
                 </a>
             </div>
             <div class="heroes_build_talent_tier">
@@ -182,5 +183,35 @@
         </div>
     </div>
 </div>
+
+<div class="main-layout">
+    <h1> Reviews </h1>
+    {{#if session.isLoggedIn}}
+    <a href="/reviews">Add new Review</a>
+    {{else}}
+    <a href="/accounts/sign-in"> Log in to write a Review</a>
+    {{/if}}
+
+    {{#if hasDatabaseError}}
+    <p>Couldn't fetch the reviews at the moment, try again later.</p>
+    {{else}}
+
+    {{#if reviews.length}}
+
+    {{#each reviews}}
+    <article>
+        <h2>{{heroesName}}</h2>
+        <h3>{{name}}</h3>
+        <p>Rating: {{rating}} out of 5</p>
+        <p>Description: {{description}}</p>
+        <a href="/reviews/{{id}}">Read more</a>
+    </article>
+    {{/each}}
+
+    {{else}}
+    <p>There are no Reviews yet, please write one.</p>
+    {{/if}}
+
+    {{/if}}
 
 </div>

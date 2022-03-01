@@ -7,7 +7,6 @@ const MAX_USERNAME_LENGTH = 10
 exports.getErrorsNewAccount = function(newUser, callback){
 	
 	const errors = []
-
 	console.log(newUser)
 	// Validate username.
 	if(!newUser.hasOwnProperty("username")){

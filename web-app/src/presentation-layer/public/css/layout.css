@@ -171,13 +171,13 @@ a{
   border-bottom: 2px solid #4F82AC;
   font-size: 3rem;
 }
-.global p{
+.main-layout p{
   padding-top: 5px;
 }
 .add{
   float: right;
 }
-.global article{
+.main-layout article{
   border-bottom: #4F82AC solid 2px;
   padding: 20px;
   padding-left: 0%;
