@@ -15,6 +15,8 @@ const supportsRouter = require('./routers/supports-router')
 const healersRouter = require('./routers/healers-router')
 const bruisersRouter = require('./routers/bruisers-router')
 const reviewRouter = require('./routers/review-router')
+const heroesRouter = require('./routers/heroes-router')
+const heroRouter = require('./routers/hero-router')
 
 const app = express()
 
@@ -67,6 +69,9 @@ app.use('/bruisers', bruisersRouter)
 app.use('/healers', healersRouter)
 app.use('/supports', supportsRouter)
 app.use('/reviews', reviewRouter)
+app.use('/heroes', heroesRouter)
+app.use('/hero', heroRouter)
+
 
 app.listen(8080, function(){
     console.log("Running on port 8080!")

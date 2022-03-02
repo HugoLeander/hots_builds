@@ -1,0 +1,19 @@
+<div class="global">
+    <h1>Heroes123</h1>
+
+
+    {{#if loadedHeroes}}
+    <div class="nav_content_entries">
+        {{#each heroes}}
+        <div class="nav_content_block_heroes">
+            <a href="/hero/{{name}}">
+                <img src="/images/heroes/{{icon}}" alt="{{name}}" id="logga">
+                <span>{{name}}</span>
+            </a>
+        </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <h2>Could not load any heroes at the moment, please try again later.</h2>
+    {{/if}}
+</div>
