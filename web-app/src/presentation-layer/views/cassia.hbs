@@ -55,7 +55,8 @@
                     <span class="heroes_build_talent_tier_situational"></span>
                     <span class="heroes_build_talent_tier_yes"></span>
                 </span>
-                <div class="imageText" title="Gain 1 Basic Attack range. While Avoidance is fully charged, gain an additional 1 Basic Attack range.">
+                <div class="imageText"
+                    title="Gain 1 Basic Attack range. While Avoidance is fully charged, gain an additional 1 Basic Attack range.">
                     <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_new_gloves.png" alt="New gloves">
                 </div>
                 <a class="heroes_build_talent_tier_situational" href="/">
@@ -87,8 +88,11 @@
 
     <div class="main-layout">
         <h1> Reviews </h1>
-
+        {{#if session.isLoggedIn}}
         <a href="/reviews">Add new Review</a>
+        {{else}}
+        <a href="/accounts/sign-in"> Log in to write a Review</a>
+        {{/if}}
 
         {{#if hasDatabaseError}}
         <p>Couldn't fetch the reviews at the moment, try again later.</p>
@@ -102,7 +106,6 @@
             <h3>{{name}}</h3>
             <p>Rating: {{rating}} out of 5</p>
             <p>Description: {{description}}</p>
-            <a href="/reviews/{{id}}">Read more</a>
         </article>
         {{/each}}
 
