@@ -89,7 +89,7 @@
     <div class="main-layout">
         <h1> Reviews </h1>
         {{#if session.isLoggedIn}}
-        <a href="/reviews">Add new Review</a>
+        <a href="/hero/{{hero.name}}/review">Add new Review</a>
         {{else}}
         <a href="/accounts/sign-in"> Log in to write a Review</a>
         {{/if}}
@@ -102,9 +102,8 @@
 
         {{#each reviews}}
         <article>
-            <h2>{{heroesName}}</h2>
-            <h3>{{name}}</h3>
-            <p>Rating: {{rating}} out of 5</p>
+            <h2>{{name}}</h2>
+            <h3>Rating: {{rating}} out of 5</h3>
             <p>Description: {{description}}</p>
         </article>
         {{/each}}

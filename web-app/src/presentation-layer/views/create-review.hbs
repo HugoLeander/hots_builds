@@ -8,11 +8,8 @@
     {{/each}}
 </ul>
 {{/if}}
-<form action="/reviews" method="post">
+<form action="/hero/{{heroName}}/review" method="post">
     <input type="hidden" name="_csrf" value={{csrfToken}}>
-    <div>
-        Heroes Name: <input type="text" name="heroesName" value="{{heroesName}}" id="heroesName" required>
-    </div>
     <div>
         Your name: <input type="text" name="name" value="{{name}}" id="name" required>
     </div>

@@ -4,8 +4,6 @@ const heroesTalents = require('heroes-talents')
 
 router.get('/', async function(request,response){
 
-    
-
     try {
         const heroes = await heroesTalents.loadHeroJSONFiles()
         const model = {heroes,
