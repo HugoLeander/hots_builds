@@ -1,8 +1,7 @@
 const express = require('express')
-const accountManager = require('../../business-logic-layer/account-manager')
-const dbConnection = require('../../data-access-layer/db')
 
-const router = express.Router()
+module.exports = function({accountManager}){
+	const router = express.Router()
 router.use(express.urlencoded({ extended: false}))
 
 router.get("/sign-in", function(request, response){
@@ -89,5 +88,5 @@ router.post('/log-out', async function(request, response){
     console.log("Logged out")
 })
 
-
-module.exports = router
+	return router
+}

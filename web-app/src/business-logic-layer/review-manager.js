@@ -1,14 +1,16 @@
-const reviewRepository = require('../data-access-layer/review-repository')
-const reviewValidator = require('./review-validator')
+module.exports = function({reviewRepository, reviewValidator}) {
 
-exports.getAllReviews = function(callback){
-	reviewRepository.getAllReviews(callback)
-}
-
-exports.getAllReviewsByName = function(name, callback){
-	reviewRepository.getAllReviewsByName(name, callback)
-}
-
-exports.createReview = function(newReview, callback){
-	reviewValidator.getErrorsNewReview(newReview, callback)	
+	return {
+		getAllReviews: function(callback){
+			reviewRepository.getAllReviews(callback)
+		},
+		
+		getAllReviewsByName: function(name, callback){
+			reviewRepository.getAllReviewsByName(name, callback)
+		},
+		
+		createReview: function(newReview, callback){
+			reviewValidator.getErrorsNewReview(newReview, callback)	
+		}
+	}
 }

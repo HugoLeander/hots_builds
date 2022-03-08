@@ -1,62 +1,41 @@
-const db = require('./db')
+module.exports = function({dbConnection}){
+	return {
+		/*
+		Retrieves all accounts ordered by username.
+		Possible errors: databaseError
+		Success value: The fetched accounts in an array.
+		*/
+		getAllAccounts: function (callback) {
 
-/*
-	Retrieves all accounts ordered by username.
-	Possible errors: databaseError
-	Success value: The fetched accounts in an array.
-*/
-exports.getAllAccounts = function (callback) {
+			const query = `SELECT * FROM accounts ORDER BY username`
+			const values = []
 
-	const query = `SELECT * FROM accounts ORDER BY username`
-	const values = []
+			dbConnection.query(query, values, function (error, accounts) {
+				if (error) {
+					callback(['databaseError'], null)
+				} else {
+					callback([], accounts)
+				}
+			})
+		},
 
-	db.query(query, values, function (error, accounts) {
-		if (error) {
-			callback(['databaseError'], null)
-		} else {
-			callback([], accounts)
+		/*
+		Retrieves the account with the given username.
+		Possible errors: databaseError
+		Success value: The fetched account, or null if no account has that username.
+		*/
+		getAccountByUsername: function (user, callback) {
+
+			const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
+			const values = [user.username]
+
+			dbConnection.query(query, values, function (error, accounts) {
+				if (error) {
+					callback(['databaseError'], null)
+				} else {
+					callback([], accounts[0])
+				}
+			})
 		}
-	})
-
-}
-
-/*
-	Retrieves the account with the given username.
-	Possible errors: databaseError
-	Success value: The fetched account, or null if no account has that username.
-*/
-exports.getAccountByUsername = function (user, callback) {
-
-	const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
-	const values = [user.username]
-
-	db.query(query, values, function (error, accounts) {
-		if (error) {
-			callback(['databaseError'], null)
-		} else {
-			callback([], accounts[0])
-		}
-	})
-}
-
-/*
-	Creates a new account.
-	account: {username: "The username", password: "The password"}
-	Possible errors: databaseError, usernameTaken
-	Success value: The id of the new account.
-*/
-exports.createAccount = function (newUser, callback) {
-
-	const query = `INSERT INTO accounts (username, password) VALUES (?, ?)`
-	const values = [newUser.username, newUser.password]
-
-	db.query(query, values, function (error, newUser) {
-		if (error) {
-			// TODO: Look for usernameUnique violation.
-			callback(['databaseError'], null)
-		} else {
-			callback([], newUser)
-		}
-	})
-
+	}
 }
