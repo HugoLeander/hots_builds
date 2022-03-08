@@ -1,4 +1,4 @@
-module.exports = function({dbConnection}) {
+module.exports = function({db}) {
     return {
         getAllReviews: function(callback){
             const query = "SELECT * FROM reviews"
@@ -16,8 +16,8 @@ module.exports = function({dbConnection}) {
         getAllReviewsByName: function(heroesName, callback){
             const query = "SELECT * FROM reviews WHERE heroesName = ?"
             const values = [heroesName]
-        
-            dbConnection.query(query, values, function(error, reviews){
+
+            db.dbConnection.query(query, values, function(error, reviews){
                 if(error) {
                     callback(['databaseError'], null)
                 } else {
@@ -31,7 +31,7 @@ module.exports = function({dbConnection}) {
             const query = `INSERT INTO reviews (heroesName, name, rating, description) VALUES (?, ?, ?, ?)`
             const values = [newReview.heroesName, newReview.name, newReview.rating, newReview.description]
         
-            dbConnection.query(query, values, function (error, newReview) {
+            db.dbConnection.query(query, values, function (error, newReview) {
                 if (error) {
                     // TODO: Look for usernameUnique violation.
                     callback(['databaseError'], null)

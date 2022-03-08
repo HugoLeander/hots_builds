@@ -3,7 +3,7 @@ const awilix = require('awilix')
 const app = require("./app")
 
 const container = awilix.createContainer()
-container.register("dbConnection", awilix.asFunction(require('../data-access-layer/db')))
+container.register("db", awilix.asFunction(require('../data-access-layer/db')))
 container.register("accountManager", awilix.asFunction(require('../business-logic-layer/account-manager')))
 container.register("accountRepository", awilix.asFunction(require('../data-access-layer/account-repository')))
 container.register("accountValidator", awilix.asFunction(require('../business-logic-layer/account-validator')))

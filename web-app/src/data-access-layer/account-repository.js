@@ -1,4 +1,4 @@
-module.exports = function({dbConnection}){
+module.exports = function({db}){
 	return {
 		/*
 		Retrieves all accounts ordered by username.
@@ -10,7 +10,7 @@ module.exports = function({dbConnection}){
 			const query = `SELECT * FROM accounts ORDER BY username`
 			const values = []
 
-			dbConnection.query(query, values, function (error, accounts) {
+			db.dbConnection.query(query, values, function (error, accounts) {
 				if (error) {
 					callback(['databaseError'], null)
 				} else {
@@ -29,7 +29,7 @@ module.exports = function({dbConnection}){
 			const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
 			const values = [user.username]
 
-			dbConnection.query(query, values, function (error, accounts) {
+			db.dbConnection.query(query, values, function (error, accounts) {
 				if (error) {
 					callback(['databaseError'], null)
 				} else {
