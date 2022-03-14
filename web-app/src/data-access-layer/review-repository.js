@@ -4,7 +4,7 @@ module.exports = function({db}) {
             const query = "SELECT * FROM reviews"
             const values = []
         
-            dbConnection.query(query, values, function(error, reviews){
+            db.dbConnection.query(query, values, function(error, reviews){
                 if(error) {
                     callback(['databaseError'], null)
                 } else {
@@ -14,9 +14,8 @@ module.exports = function({db}) {
         },
         
         getAllReviewsByName: function(heroesName, callback){
-            const query = "SELECT * FROM reviews WHERE heroesName = ?"
+            const query = "SELECT * FROM reviews WHERE hero_name = ?"
             const values = [heroesName]
-
             db.dbConnection.query(query, values, function(error, reviews){
                 if(error) {
                     callback(['databaseError'], null)
@@ -28,7 +27,7 @@ module.exports = function({db}) {
         
         createReview: function (newReview, callback) {
         
-            const query = `INSERT INTO reviews (heroesName, name, rating, description) VALUES (?, ?, ?, ?)`
+            const query = `INSERT INTO reviews (hero_name, name, rating, description) VALUES (?, ?, ?, ?)`
             const values = [newReview.heroesName, newReview.name, newReview.rating, newReview.description]
         
             db.dbConnection.query(query, values, function (error, newReview) {

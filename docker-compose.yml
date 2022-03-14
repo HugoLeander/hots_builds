@@ -6,6 +6,7 @@ services:
       - "8080:8080"
     volumes:
       - "./web-app/src:/web-app/src"
+      
   "database":
     build: "./database"
     environment:
@@ -13,7 +14,16 @@ services:
       MYSQL_DATABASE: "my-platform"
     ports:
       - "3306:3306"
+
   session-redis:
     build: "./session-redis"
     ports:
       - "6379:6379"
+
+  "postgresql":
+    build: "./postgresql"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'

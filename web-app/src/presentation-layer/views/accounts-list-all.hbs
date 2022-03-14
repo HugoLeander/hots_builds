@@ -1,0 +1,13 @@
+<div>
+      <h1>Accounts</h1>
+
+    {{#if accounts}}
+    <div class="nav_content_entries">
+        {{#each accounts}}
+        <p>{{username}}</p>
+        {{/each}}
+    </div>
+    {{else}}
+    <h2>Could not load any accounts at the moment, please try again later.</h2>
+    {{/if}}
+</div>

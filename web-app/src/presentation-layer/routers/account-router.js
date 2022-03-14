@@ -25,7 +25,6 @@ router.post("/sign-in", function(request, response){
 	}
 
 	accountManager.getAccountByUsername(user, function(errors, userGotBack){
-
 		const model = {
 			errors: errors
 		}
