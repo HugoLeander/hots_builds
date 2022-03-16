@@ -25,16 +25,53 @@ module.exports = function({accountRepository}) {
 				errors.push("Passwords don't match")
 				console.log("passwords dont match")
 			}
-			accountRepository.createAccount(newUser, function(error, newUser){
-		
-				if(errors.length > 0){
-					console.log(errors)
-				}
-				else {
-					callback(errors, newUser)
-					console.log("skickade till repository")
-				}
-			})
+			if(errors.length > 0) {
+				console.log(errors)
+			} else {
+				accountRepository.createAccount(newUser, function(error, newUser){
+					if(error){
+						console.log(error)
+					} else {
+						callback(error, newUser)
+						console.log("skickade till repo")
+					}
+				})
+			}
+		},
+
+
+		getErrorsNewInfo: function(newInfo, callback){
+			const errors = []
+			//console.log(newInfo)
+			// Validate username.
+			if(!newInfo.hasOwnProperty("username")){
+				errors.push("username is Missing")
+			}
+			if(newInfo.username.length < MIN_USERNAME_LENGTH){
+				errors.push("username is Too Short")
+				console.log("error min length")
+			}
+			if(MAX_USERNAME_LENGTH < newInfo.username.length){
+				errors.push("username is Too Long")
+				console.log("error max length")
+			}
+			if(newInfo.password != newInfo.confirm_password){
+				errors.push("Passwords don't match")
+				console.log("passwords dont match")
+			}
+
+			if(errors.length > 0) {
+				console.log(errors)
+			} else {
+				accountRepository.updateAccountInformation(newInfo, function(error, newInfo){
+					if(error){
+						callback(error)
+					} else {
+						callback(error, newInfo)
+						console.log("skickade till repo")
+					}
+				})
+			}
 		}
 	}
 }

@@ -4,9 +4,9 @@ const app = require("./app")
 const container = awilix.createContainer()
 
 //data-access-layer
-// container.register("accountRepository", awilix.asFunction(require('../data-access-layer/account-repository')))
-// container.register("db", awilix.asFunction(require('../data-access-layer/db')))
-// container.register("reviewRepository", awilix.asFunction(require('../data-access-layer/review-repository')))
+// container.register("accountRepositoryOld", awilix.asFunction(require('../data-access-layer/account-repository')))
+// container.register("db-old", awilix.asFunction(require('../data-access-layer/db')))
+// container.register("reviewRepository-old", awilix.asFunction(require('../data-access-layer/review-repository')))
 
 //data-access-layer-postgres
 container.register("accountRepository", awilix.asFunction(require('../data-access-layer-postgres/account-repository')))
@@ -25,6 +25,7 @@ container.register("variousRouter", awilix.asFunction(require('./routers/various
 container.register("accountRouter", awilix.asFunction(require('./routers/account-router')))
 container.register("heroesRouter", awilix.asFunction(require('./routers/heroes-router')))
 container.register("heroRouter", awilix.asFunction(require('./routers/hero-router')))
+container.register("restApi", awilix.asFunction(require('../pll-rest/rest-api-router')))
 container.register("app", awilix.asFunction(app))
 
 

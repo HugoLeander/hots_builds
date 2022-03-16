@@ -23,5 +23,5 @@ VALUES 	('Alice', 'abc123'),
 
 -- Create reviews for Cassia and Azmodan.
 INSERT INTO reviews (hero_name, name, rating, description) 
-VALUES 	('Thral', 'Hugo', 4, 'I think this build is very good'),
+VALUES 	('Thrall', 'Hugo', 4, 'I think this build is very good'),
 		('Murky', 'Sebbe', 5, 'I like to split push with this build');

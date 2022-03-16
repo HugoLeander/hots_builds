@@ -21,7 +21,7 @@ services:
       - "6379:6379"
 
   "postgresql":
-    build: "./postgresql"
+    build: "./postgreSQL"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
