@@ -19,6 +19,7 @@
     "express-handlebars": "^6.0.2",
     "express-session": "^1.17.2",
     "heroes-talents": "git+https://git@github.com/heroespatchnotes/heroes-talents.git",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.15",
     "pg": "^8.7.3",

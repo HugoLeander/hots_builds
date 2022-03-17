@@ -4,15 +4,15 @@ const app = require("./app")
 const container = awilix.createContainer()
 
 //data-access-layer
-// container.register("accountRepositoryOld", awilix.asFunction(require('../data-access-layer/account-repository')))
-// container.register("db-old", awilix.asFunction(require('../data-access-layer/db')))
-// container.register("reviewRepository-old", awilix.asFunction(require('../data-access-layer/review-repository')))
+container.register("accountRepository", awilix.asFunction(require('../data-access-layer/account-repository')))
+container.register("db", awilix.asFunction(require('../data-access-layer/db')))
+container.register("reviewRepository", awilix.asFunction(require('../data-access-layer/review-repository')))
 
 //data-access-layer-postgres
-container.register("accountRepository", awilix.asFunction(require('../data-access-layer-postgres/account-repository')))
-container.register("db", awilix.asFunction(require('../data-access-layer-postgres/db')))
-container.register("reviewRepository", awilix.asFunction(require('../data-access-layer-postgres/review-repository')))
-container.register("models", awilix.asFunction(require("../data-access-layer-postgres/models")))
+// container.register("accountRepository", awilix.asFunction(require('../data-access-layer-postgres/account-repository')))
+// container.register("db", awilix.asFunction(require('../data-access-layer-postgres/db')))
+// container.register("reviewRepository", awilix.asFunction(require('../data-access-layer-postgres/review-repository')))
+// container.register("models", awilix.asFunction(require("../data-access-layer-postgres/models")))
 
 //business-logic-layer
 container.register("accountManager", awilix.asFunction(require('../business-logic-layer/account-manager')))
