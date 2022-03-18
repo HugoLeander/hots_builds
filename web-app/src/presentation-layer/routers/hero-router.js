@@ -1,38 +1,39 @@
 const express = require('express')
-const heroesTalents = require('heroes-talents')
 
-module.exports = function({reviewManager}) {
+module.exports = function({reviewManager, heroManager}) {
     const router = express.Router()
     
     router.use(express.urlencoded({ extended: false}))
 
-    router.get('/:heroName', async function(request, response){
+    router.get('/:hero_name', async function(request, response){
 
-        const name = request.params.heroName
+        const name = request.params.hero_name
 
-        try {
-            const heroes = await heroesTalents.loadHeroJSONFiles()
-            const hero = heroes[name]
-            reviewManager.getAllReviewsByName(name, function(errors, reviews){
+        heroManager.getHeroByName(name, function(hero_errors, hero){
+            reviewManager.getAllReviewsByName(name, function(review_errors, reviews) {
+                const errors = hero_errors
+                errors.push(review_errors)
+
                 const model = {
                     hero,
                     errors: errors,
                     reviews: reviews
                 }
-                response.render('hero.hbs', model)
+                if(errors.lenght > 0){
+                    console.log(errors)
+                    response.redirect("/heroes")
+                } else {
+                    response.render('hero.hbs', model)
+                }
             })
-            
-        } catch {
-            //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            response.render('bruisers.hbs')
-        }
+        })
     })
 
-    router.get('/:heroName/review', function(request, response){
+    router.get('/:hero_name/review', function(request, response){
         //TODO add validation so that the hero exists
         //TODO add errors
 
-        const name = request.params.heroName
+        const name = request.params.hero_name
 
         const model = {
             heroName: name
@@ -44,15 +45,15 @@ module.exports = function({reviewManager}) {
         response.render("create-review.hbs")
     })
 
-    router.post("/:heroName/review", function(request, response){
+    router.post("/:hero_name/review", function(request, response){
         
         //TODO add validation so that the hero exists
         //TODO fix how we use the name of the hero when creating reviews
 
-        const name = request.params.heroName
+        const name = request.params.hero_name
 
         const newReview = {
-            heroesName: name,
+            hero_name: name,
             name: request.body.name,
             rating: request.body.rating,
             description: request.body.description 

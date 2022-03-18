@@ -65,10 +65,11 @@ module.exports = function({accountRepository}) {
 			} else {
 				accountRepository.updateAccountInformation(newInfo, function(error, newInfo){
 					if(error){
+						console.log(error)
 						callback(error)
 					} else {
-						callback(error, newInfo)
 						console.log("skickade till repo")
+						callback(error, newInfo)
 					}
 				})
 			}

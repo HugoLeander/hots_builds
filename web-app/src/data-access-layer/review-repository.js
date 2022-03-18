@@ -13,9 +13,9 @@ module.exports = function({db}) {
             })
         },
         
-        getAllReviewsByName: function(heroesName, callback){
+        getAllReviewsByName: function(hero_name, callback){
             const query = "SELECT * FROM reviews WHERE hero_name = ?"
-            const values = [heroesName]
+            const values = [hero_name]
             db.dbConnection.query(query, values, function(error, reviews){
                 if(error) {
                     callback(['databaseError'], null)
@@ -28,7 +28,7 @@ module.exports = function({db}) {
         createReview: function (newReview, callback) {
         
             const query = `INSERT INTO reviews (hero_name, name, rating, description) VALUES (?, ?, ?, ?)`
-            const values = [newReview.heroesName, newReview.name, newReview.rating, newReview.description]
+            const values = [newReview.hero_name, newReview.name, newReview.rating, newReview.description]
         
             db.dbConnection.query(query, values, function (error, newReview) {
                 if (error) {

@@ -13,7 +13,7 @@ module.exports = function ({ db, models }) {
 				const accounts = []
 				result.forEach(e => {
 					accounts.push(e.dataValues)
-				});
+				})
 
 				callback([], accounts)
 
@@ -44,6 +44,72 @@ module.exports = function ({ db, models }) {
 			} catch (error) {
 				callback(['databaseError'], null)
 			}
+		},
+
+		getAccountById: async function (user, callback) {
+			
+			console.log(user.account_id)
+			try {
+				const result = await models.account.findAll({
+					where: {
+						account_id: user.account_id
+					},
+					limit: 1
+				});
+				const foundUser = result[0].dataValues
+
+				callback([], foundUser)
+			} catch (error) {
+				callback(['databaseError'], null)
+			}
+		},
+
+		createAccount: async function (newUser, callback) {
+			try {
+				const account = await models.account.create({
+					username: newUser.username,
+					password: newUser.password,
+				})
+				callback([], newUser)
+			} catch (error) {
+				// TODO: Look for usernameUnique violation.
+				callback(['databaseError'], null)
+			}
+		},
+
+		deleteAccountById: async function(id, callback) {
+
+			try {
+				await models.account.destroy({
+					where: {
+						account_id :id
+					}
+				})
+				callback([])
+			} catch (error) {
+				callback(['databaseError'], null)
+			}
+		},
+
+		updateAccountInformation: async function(newInfo, callback) {
+	
+			try {
+				await models.account.update({ 
+					username: newInfo.username,
+					password: newInfo.password}, {
+					where: {
+					account_id: newInfo.account_id
+					}
+				})
+
+				callback([], newInfo)
+			} catch (error) {
+				console.log(error)
+				callback(['databaseError'], null)
+			}
 		}
 	}
 }
+
+
+
