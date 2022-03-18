@@ -39,7 +39,6 @@ module.exports = function({accountRepository}) {
 			}
 		},
 
-
 		getErrorsNewInfo: function(newInfo, callback){
 			const errors = []
 			//console.log(newInfo)

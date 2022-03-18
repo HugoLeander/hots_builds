@@ -6,6 +6,7 @@ const expressSession = require('express-session')
 const connectRedis = require('connect-redis')
 const redisStore = connectRedis(expressSession)
 
+
 module.exports = function({variousRouter, accountRouter, heroesRouter, heroRouter, restApi }) {
 	return {
 		start() {

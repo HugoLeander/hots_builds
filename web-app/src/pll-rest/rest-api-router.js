@@ -33,9 +33,20 @@ module.exports = function ({ accountManager }) {
     const router = express.Router()
 
     router.use(bodyParser.json())
+    router.use(express.urlencoded({
+        extended: false,
+    }))
 
     router.use(function (request, response, next) {
-        console.log(request.method, request.url)
+        response.setHeader("Access-Control-Allow-Origin", "*")
+	    response.setHeader("Access-Control-Allow-Methods", "*")
+	    response.setHeader("Access-Control-Allow-Headers", "*")
+	    response.setHeader("Access-Control-Expose-Headers", "*")
+
+        if(request.method == "OPTIONS"){
+            return response.status(200).end()
+        }
+
         next()
     })
 
@@ -48,6 +59,7 @@ module.exports = function ({ accountManager }) {
             }
         })
     })
+
 
     router.post("/", function (request, response) {
 
@@ -104,13 +116,13 @@ module.exports = function ({ accountManager }) {
         })
     })
 
-    router.get("/:id", verifyToken, function (request, response) { // verifyToken funktionen används som middleware
+    router.get("/:id", function (request, response) { // verifyToken funktionen används som middleware
 
-        if(verifyToken) { // om token = 
-            response.status(200)
-        } else {
-            response.sendStatus(403)
-        }
+        // if(verifyToken) { // om token = 
+        //     response.status(200)
+        // } else {
+        //     response.sendStatus(403)
+        // }
 
         const id = request.params.id
 
