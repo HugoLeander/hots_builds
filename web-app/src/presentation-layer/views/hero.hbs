@@ -1,89 +1,50 @@
 <h1>{{hero.name}}</h1>
 
-<div class="heroes_builds">
-    <div class="heroes_build">
-        <div class="heroes_build_header">
-            <h3 class="toc_no_parsing">Auto Attack Build</h3>
-            <span class="heroes_build_tag heroes_build_tag_recommended">
-                <span>Recommended</span>
-                <span class="heroes_build_tag_image"></span>
-            </span>
-        </div>
-        <div class="heroes_build_talents">
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 1</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_yes"></span>
+
+{{#if builds.length}}
+
+    {{#each builds}}
+        <div class="heroes_build">
+            <div class="heroes_build_header">
+                <h3 class="toc_no_parsing">{{build_name}}</h3>
+                {{!-- This needs to be fixed --}}
+                <span class="heroes_build_tag heroes_build_tag_recommended">
+                    <span>Recommended</span>
+                    <span class="heroes_build_tag_image"></span>
                 </span>
-                <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_new_chargedstrikes.png" alt="auto attack">
+                {{!-- ############################ --}}
             </div>
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 4</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_yes"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                </span>
-                <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_avoidance_b.png" alt="impale">
-            </div>
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 7</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_yes"></span>
-                </span>
-                <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_avoidance_b.png" alt="scarabhost">
-            </div>
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 10</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_situational"></span>
-                    <span class="heroes_build_talent_tier_yes"></span>
-                </span>
-                <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_balllightning.png" alt="lightning ball">
-                <a class="heroes_build_talent_tier_situational" href="/">
-                    <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_valkrie.png" alt="valkrie">
-                </a>
-            </div>
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 13</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_situational"></span>
-                    <span class="heroes_build_talent_tier_yes"></span>
-                </span>
-                <div class="imageText"
-                    title="Gain 1 Basic Attack range. While Avoidance is fully charged, gain an additional 1 Basic Attack range.">
-                    <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_new_gloves.png" alt="New gloves">
+            <div class="heroes_build_talents">
+                {{#each talents}}
+                    <div class="heroes_build_talent_tier">
+                    <span class="heroes_build_talent_tier_subtitle">{{available_at}}</span>
+                    {{!-- This needs to be fixed --}}
+                    <span class="heroes_build_talent_tier_visual">
+                        {{#each talent_tier_visual}}
+                            {{#if isTrue}}
+                                <span class="heroes_build_talent_tier_yes"></span>
+                            {{else}}
+                                <span class="heroes_build_talent_tier_no"></span>
+                            {{/if}}
+                        {{/each}}
+                    </span>
+                    {{!-- ############################ --}}
+                    <div class="tooltip">
+                        <img src={{icon}} alt={{name}}>
+                        <p>{{name}}</p>
+                        <span class="tooltiptext">{{description}}</span>
+                    </div>
+                    
                 </div>
-                <a class="heroes_build_talent_tier_situational" href="/">
-                    <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_avoidance_b.png" alt="avoidance">
-                </a>
-            </div>
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 16</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_yes"></span>
-                </span>
-                <img src="/images/talents-copy/storm_ui_icon_talent_autoattack_damage.png" alt="auto attack">
-            </div>
-            <div class="heroes_build_talent_tier">
-                <span class="heroes_build_talent_tier_subtitle">Level 20</span>
-                <span class="heroes_build_talent_tier_visual">
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                    <span class="heroes_build_talent_tier_yes"></span>
-                    <span class="heroes_build_talent_tier_no"></span>
-                </span>
-                <img src="/images/talents-copy/cassia/storm_ui_icon_cassia_avoidance_b.png" alt="rewind">
+                {{/each}}
             </div>
         </div>
-    </div>
+    {{/each}}
+
+    {{else}}
+        <p>No builds have been made for this character yet</p>
+{{/if}}
+
 
 
     <div class="main-layout">
@@ -115,5 +76,4 @@
         {{/if}}
 
     </div>
-
 </div>

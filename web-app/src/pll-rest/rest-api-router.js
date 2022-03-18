@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken")
 
 const secretKey = 'kattunge' // måste vara samma secret key för encrypt och decrypt därav en constant 
 
@@ -49,6 +49,25 @@ module.exports = function ({ accountManager, heroManager}) {
         })
     })
 
+    router.post("/", function (request, response) {
+
+        const newAccount = {
+            account_id: request.params.id,
+            username: request.body.username,
+            password: request.body.password,
+            confirm_password: request.body.confirm_password
+        }
+
+        accountManager.createAccount(newAccount, function(errors, account) {
+            if (errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                response.setHeader("Location", "/" + account)
+                response.status(200).json({account})
+            }
+        })
+    })
+
     router.get("/heroes", function (request, response) {
 
         heroManager.getAllHeroes(function(errors, heroes){
@@ -66,13 +85,44 @@ module.exports = function ({ accountManager, heroManager}) {
         const name = request.params.hero_name
 
         heroManager.getHeroByName(name, function(errors, hero){
-                if(errors.length > 0) {
-                    response.status(400).json(errors)
-                } else {
-                    response.status(200).json(hero)
-                }
-            })
+            if(errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                response.status(200).json(hero)
+            }
         })
+    })
+
+    router.get('/build/:hero_name', async function(request, response){
+
+        console.log(name)
+
+        heroManager.getBuildsByHeroName(name, function(errors, hero){
+            if(errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                response.status(200).json(hero)
+            }
+        })
+    })
+
+    router.post('/createBuild', async function(request, response){
+
+        const newBuild = {
+            hero_name: request.body.hero_name,
+            talents: request.body.talents,
+            build_name: request.body.build_name,
+            build_description: request.body.build_description
+        }
+
+        heroManager.createBuild(newBuild, async function(errors, build){
+            if(errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                response.status(200).json(build)
+            }
+        })
+    })
 
     router.get("/login", verifyToken, function (request, response) {
         if(verifyToken) {

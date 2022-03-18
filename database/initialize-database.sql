@@ -14,6 +14,20 @@ CREATE TABLE reviews (
 	description TEXT NOT NULL
 );
 
+CREATE TABLE builds (
+	build_id INT AUTO_INCREMENT PRIMARY KEY,
+	build_name VARCHAR(30) NOT NULL,
+	description TEXT,
+	hero_id INT NOT NULL,
+	talentTreeId_level_1 VARCHAR(50) NOT NULL,
+	talentTreeId_level_4 VARCHAR(50) NOT NULL,
+	talentTreeId_level_7 VARCHAR(50) NOT NULL,
+	talentTreeId_level_10 VARCHAR(50) NOT NULL,
+	talentTreeId_level_13 VARCHAR(50) NOT NULL,
+	talentTreeId_level_16 VARCHAR(50) NOT NULL,
+	talentTreeId_level_20 VARCHAR(50) NOT NULL
+);
+
 -- Create a dummy account for testing.
 INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
 INSERT INTO accounts (username, password) VALUES ("Hugo", "abc123");
