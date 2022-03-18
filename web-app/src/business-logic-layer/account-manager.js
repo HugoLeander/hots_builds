@@ -15,7 +15,6 @@ module.exports = function({accountRepository, accountValidator}){
 			accountRepository.getAccountById(user, callback)
 		},
 		
-
 		createAccount: function(newUser, callback){
 			accountValidator.getErrorsNewAccount(newUser, callback)	
 		},

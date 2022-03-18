@@ -27,3 +27,14 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
+
+  spa:
+    image: nginx
+    container_name: spa
+    ports:
+      - "80:80"
+    volumes:
+      - ./spa/nginx.conf:/etc/nginx/nginx.conf
+      - ./spa/index.html:/data/www/index.html
+      - ./spa/js/navigation.js:/data/www/navigation.js
+      - ./spa/css/styles.css:/data/www/styles.css
