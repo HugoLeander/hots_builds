@@ -5,7 +5,7 @@ module.exports = function({db}){
 		Possible errors: databaseError
 		Success value: The fetched accounts in an array.
 		*/
-		getAllAccounts: function (callback) {
+		getAllAccounts: function (callback) { // den finns
 
 			const query = `SELECT * FROM accounts ORDER BY account_id`
 			const values = []
@@ -38,7 +38,7 @@ module.exports = function({db}){
 			})
 		},
 
-		getAccountByUsername: function (user, callback) {
+		getAccountByUsername: function (user, callback) { // den finns
 
 			const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
 			const values = [user.username]
@@ -88,7 +88,7 @@ module.exports = function({db}){
 			console.log(values)
 			db.dbConnection.query(query, values, function(error, newInfo) {
 				if(error) {
-					console.log("error i datbasen")
+					console.log("error i databasen")
 					callback(['databaseError'], null)
 				} else {
 					console.log("Uppdaterade!")
