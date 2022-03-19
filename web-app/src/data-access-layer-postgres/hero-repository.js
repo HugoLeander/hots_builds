@@ -21,7 +21,7 @@ module.exports = function ({models}) {
         },
  
         getHeroByName: async function(hero_name, callback) {
-            console.log("name")
+            console.log(hero_name)
             try {
                 const heroes = await heroesTalents.loadHeroJSONFiles()
                 const hero = heroes[hero_name]
