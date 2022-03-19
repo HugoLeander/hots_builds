@@ -30,6 +30,8 @@ module.exports = function ({ accountManager, heroManager}) {
         }
     }
 
+
+
     const router = express.Router()
 
     router.use(bodyParser.json())
@@ -148,27 +150,41 @@ module.exports = function ({ accountManager, heroManager}) {
     })
 
     router.post("/login", function (request, response) {
+        const grant_type = request.body.grant_type
 
-        const user = {
-            username: request.body.username,
-            password: request.body.password
-        }
+        if(grant_type == "password") {
 
-        accountManager.getAccountByUsername(user, function (errors, userGotBack) {
-
-            if (user.password == userGotBack.password) {
-                const payload = {
-                    isLoggedIn: true
-                }
-                jwt.sign({ user: userGotBack, payload }, secretKey, function (error, token) { // här blir man tilldelad en token
-                    response.json({
-                        token
-                    })
-                })
-            } else {
-                response.status(400).json("Wrong password")
+            const user = {
+                username: request.body.username,
+                password: request.body.password
             }
-        })
+
+            accountManager.getAccountByUsername(user, function (errors, userGotBack) {
+
+                if (user.password == userGotBack.password) {
+                    const payload = {
+                        isLoggedIn: true
+                    }
+                    jwt.sign({ user: userGotBack, payload }, secretKey, function (error, token) { // här blir man tilldelad en token
+                        if(error){
+                            console.log(error)
+                            response.status(401).json("Invalid client error")
+                        } else {
+                            response.status(200).json({
+                                "access_token": token
+                            })
+    
+                        }
+                    })
+                }
+                else {
+                    response.status(401).json(errors)
+                }
+            })
+        }
+        else {
+            response.status(400).json({ error: "unspported_grant_type"})
+        }
     })
 
     router.get("/:id", function (request, response) { // verifyToken funktionen används som middleware

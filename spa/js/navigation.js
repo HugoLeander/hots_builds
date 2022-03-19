@@ -69,6 +69,11 @@ function showPage(url){
 			nextPageId = 'signUp-page'
 			break
 		
+		case '/update':
+			nextPageId = 'update-page'
+			break
+				
+
 		default:
 			if(url.startsWith("/accounts/")){
 				const [empty, humans, id] = url.split("/")
@@ -147,7 +152,8 @@ async function login(username, password) {
 
     const model = {
         username: username,
-        password: password
+        password: password,
+		grant_type: "password"
     }
 
     const response = await fetch(restAPI + "login", {
@@ -170,9 +176,49 @@ async function login(username, password) {
 
             break
         
-        case 403:
+        case 401:
             // handle error
             break
+		
+		
+		case 400:
+			//handle error
+			break
+
     }
 
+}
+
+async function createAccount(account){
+	const response = await fetch(restAPI + "create", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(account)
+	})
+
+	switch(response.status){
+		case 201:
+			const createdAccount = await response.json()
+			hideCurrentPage()
+			showPage("accounts"/ + createdAccount.id)
+			break
+		
+		case 401:
+			//handle error
+			break
+
+		case 400:
+			//handle error
+			break
+
+		case 500:
+			//handle error
+			break
+
+		default:
+			//handle error
+			break
+	}
 }

@@ -45,6 +45,7 @@
             <h1>Account</h1>
             <div>ID: <span id="account-id"></span></div>
             <div>Username:  <span id="account-username"></span></div>
+            <a href="/update">Update information</a>
         </div>
 
         <div class="page" id="login-page">
@@ -73,10 +74,22 @@
             </form>
         </div>
 
+        <div class="page" id="update-page">
+            <form action="/update" method="PUT">
+                <div class="padding">
+                    <input type="text" name="update-username" id="update-username" placeholder="New Username">
+                </div>
+                <div class="padding">
+                    <input type="submit" value="Update information">
+                </div>
+            </form>
+        </div>
+
         <div class="page" id="not-found-page">
             <h1>Not found page</h1>
             <p>This is the not found page</p>
         </div>
+        
     </main>
 </body>
 </html>

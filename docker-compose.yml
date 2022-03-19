@@ -30,7 +30,6 @@ services:
 
   spa:
     image: nginx
-    container_name: spa
     ports:
       - "80:80"
     volumes:
