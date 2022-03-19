@@ -212,7 +212,6 @@ module.exports = function ({ accountManager, heroManager}) {
         })
     })
 
-
     router.delete("/:id", verifyToken, function (request, response) {
 
         if(verifyToken) { // om token = 

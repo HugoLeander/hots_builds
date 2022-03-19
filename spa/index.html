@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <script src="navigation.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/navigation.js"></script>
     <title>SPA</title>
 </head>
 <body>
@@ -45,7 +45,23 @@
             <h1>Account</h1>
             <div>ID: <span id="account-id"></span></div>
             <div>Username:  <span id="account-username"></span></div>
-            <a href="/update">Update information</a>
+            <div>
+                <form action="/update" method="PUT">
+                    <div class="padding">
+                        <input type="text" name="update-username" id="update-username" placeholder="New Username">
+                    </div>
+                    <div class="padding">
+                        <input type="text" name="update-username" id="update-password" placeholder="New Password">
+                    </div>
+                    <div class="padding">
+                        <input type="text" name="update-username" id="confirm-update-password" placeholder="Confirm Password">
+                    </div>
+                    <div class="padding">
+                        <input type="submit" value="Update information">
+                    </div>
+                </form>
+            </div>
+            <!-- <a href="/update">Update information</a> -->
         </div>
 
         <div class="page" id="login-page">
@@ -74,16 +90,22 @@
             </form>
         </div>
 
-        <div class="page" id="update-page">
+        <!-- <div class="page" id="update-page">
             <form action="/update" method="PUT">
                 <div class="padding">
                     <input type="text" name="update-username" id="update-username" placeholder="New Username">
                 </div>
                 <div class="padding">
+                    <input type="text" name="update-username" id="update-password" placeholder="New Password">
+                </div>
+                <div class="padding">
+                    <input type="text" name="update-username" id="confirm-update-password" placeholder="Confirm Password">
+                </div>
+                <div class="padding">
                     <input type="submit" value="Update information">
                 </div>
             </form>
-        </div>
+        </div> -->
 
         <div class="page" id="not-found-page">
             <h1>Not found page</h1>
