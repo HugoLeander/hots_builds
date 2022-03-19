@@ -32,26 +32,29 @@ module.exports = function ({db}) {
         },
 
         createBuild: async function(newBuild, callback) {
+            try {
+                const heroes = await heroesTalents.loadHeroJSONFiles()
+                const heroId = heroes[newBuild.hero_name].id
+                const heroTalents = heroes[newBuild.hero_name]["talents"]
 
-            const heroes = await heroesTalents.loadHeroJSONFiles()
-            const heroId = heroes[newBuild.hero_name].id
-            const heroTalents = heroes[newBuild.hero_name]["talents"]
-
-            if(countArray(newBuild.talents) != 7) {
-                //WRONG, BREAK 
+                if(countArray(newBuild.talents) != 7) {
+                    //WRONG, BREAK 
+                }
+                
+                const query = `INSERT INTO builds (build_name, description, hero_id, talentTreeId_level_1, talentTreeId_level_4, talentTreeId_level_7, talentTreeId_level_10, talentTreeId_level_13, talentTreeId_level_16, talentTreeId_level_20) VALUES (?)`
+                const values = [newBuild.build_name, newBuild.build_description, heroId, heroTalents["1"].find(element => element.sort == newBuild.talents[0]).talentTreeId, heroTalents["4"].find(element => element.sort == newBuild.talents[1]).talentTreeId, heroTalents["7"].find(element => element.sort == newBuild.talents[2]).talentTreeId, heroTalents["10"].find(element => element.sort == newBuild.talents[3]).talentTreeId, heroTalents["13"].find(element => element.sort == newBuild.talents[4]).talentTreeId, heroTalents["16"].find(element => element.sort == newBuild.talents[5]).talentTreeId, heroTalents["20"].find(element => element.sort == newBuild.talents[6]).talentTreeId]
+                
+                db.dbConnection.query(query, [values], function (error, build) {
+                    if (error) {
+                        console.log(error)
+                        callback(['databaseError'], null)
+                    } else {
+                        callback([], build)
+                    }
+                })
+            } catch (error) {
+                callback([error], null)
             }
-            
-            const query = `INSERT INTO builds (build_name, description, hero_id, talentTreeId_level_1, talentTreeId_level_4, talentTreeId_level_7, talentTreeId_level_10, talentTreeId_level_13, talentTreeId_level_16, talentTreeId_level_20) VALUES (?)`
-			const values = [newBuild.build_name, newBuild.build_description, heroId, heroTalents["1"].find(element => element.sort == newBuild.talents[0]).talentTreeId, heroTalents["4"].find(element => element.sort == newBuild.talents[1]).talentTreeId, heroTalents["7"].find(element => element.sort == newBuild.talents[2]).talentTreeId, heroTalents["10"].find(element => element.sort == newBuild.talents[3]).talentTreeId, heroTalents["13"].find(element => element.sort == newBuild.talents[4]).talentTreeId, heroTalents["16"].find(element => element.sort == newBuild.talents[5]).talentTreeId, heroTalents["20"].find(element => element.sort == newBuild.talents[6]).talentTreeId]
-			
-            db.dbConnection.query(query, [values], function (error, build) {
-				if (error) {
-                    console.log(error)
-					callback(['databaseError'], null)
-				} else {
-					callback([], build)
-				}
-			})
         },
 
         getBuildsByHeroName: async function(hero_name, callback) {

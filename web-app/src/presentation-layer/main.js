@@ -1,20 +1,26 @@
 const awilix = require('awilix')
 const app = require("./app")
 
+const usePostgres = true
+
 const container = awilix.createContainer()
 
-// //data-access-layer
-container.register("accountRepository", awilix.asFunction(require('../data-access-layer/account-repository')))
-container.register("db", awilix.asFunction(require('../data-access-layer/db')))
-container.register("reviewRepository", awilix.asFunction(require('../data-access-layer/review-repository')))
-container.register("heroRepository", awilix.asFunction(require('../data-access-layer/hero-repository')))
-
-//data-access-layer-postgres
-// container.register("accountRepository", awilix.asFunction(require('../data-access-layer-postgres/account-repository')))
-// container.register("db", awilix.asFunction(require('../data-access-layer-postgres/db')))
-// container.register("reviewRepository", awilix.asFunction(require('../data-access-layer-postgres/review-repository')))
-// container.register("models", awilix.asFunction(require("../data-access-layer-postgres/models")))
-// container.register("heroRepository", awilix.asFunction(require('../data-access-layer-postgres/hero-repository')))
+if(usePostgres) {
+    //data-access-layer-postgres
+    console.log("postgres is used")
+    container.register("accountRepository", awilix.asFunction(require('../data-access-layer-postgres/account-repository')))
+    container.register("db", awilix.asFunction(require('../data-access-layer-postgres/db')))
+    container.register("reviewRepository", awilix.asFunction(require('../data-access-layer-postgres/review-repository')))
+    container.register("models", awilix.asFunction(require("../data-access-layer-postgres/models")))
+    container.register("heroRepository", awilix.asFunction(require('../data-access-layer-postgres/hero-repository')))
+} else {
+    //data-access-layer
+    console.log("mySQL is used")
+    container.register("accountRepository", awilix.asFunction(require('../data-access-layer/account-repository')))
+    container.register("db", awilix.asFunction(require('../data-access-layer/db')))
+    container.register("reviewRepository", awilix.asFunction(require('../data-access-layer/review-repository')))
+    container.register("heroRepository", awilix.asFunction(require('../data-access-layer/hero-repository')))
+}
 
 //business-logic-layer
 container.register("accountManager", awilix.asFunction(require('../business-logic-layer/account-manager')))
@@ -30,7 +36,6 @@ container.register("heroesRouter", awilix.asFunction(require('./routers/heroes-r
 container.register("heroRouter", awilix.asFunction(require('./routers/hero-router')))
 container.register("restApi", awilix.asFunction(require('../pll-rest/rest-api-router')))
 container.register("app", awilix.asFunction(app))
-
 
 //resolve the dependencies and run the app
 const theApp = container.resolve("app")

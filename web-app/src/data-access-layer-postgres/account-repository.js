@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-module.exports = function ({ db, models }) {
+module.exports = function ({models }) {
 	return {
 		/*
 		Retrieves all accounts ordered by username.

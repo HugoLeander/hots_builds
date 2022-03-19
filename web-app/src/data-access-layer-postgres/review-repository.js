@@ -1,4 +1,4 @@
-module.exports = function({db, models}) {
+module.exports = function({models}) {
     return {
         getAllReviews: async function(callback){
             try {

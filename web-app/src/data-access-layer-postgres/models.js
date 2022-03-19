@@ -48,6 +48,57 @@ module.exports = function({db}) {
           }, {
             tablename: "reviews",
             timestamps: false
-          })
+          }),
+        build: db.dbConnection.define('build', {
+          build_id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            allowNull: false,
+            primaryKey: true,
+          },
+          build_name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          description: {
+            type: Sequelize.STRING,
+            allowNull: true,
+          },
+          hero_id: {
+              type: Sequelize.INTEGER,
+              allowNull: false,
+          },
+          talentTreeId_level_1: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          },
+          talentTreeId_level_4: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          },
+          talentTreeId_level_7: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          },
+          talentTreeId_level_10: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          },
+          talentTreeId_level_13: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          },
+          talentTreeId_level_16: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          },
+          talentTreeId_level_20: {
+              type: Sequelize.STRING,
+              allowNull: false,
+          }
+        }, {
+          tablename: "builds",
+          timestamps: false
+        })
     }
 }

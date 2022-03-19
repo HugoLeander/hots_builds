@@ -15,6 +15,21 @@ CREATE TABLE IF NOT EXISTS "reviews" (
 	PRIMARY KEY (review_id)
 );
 
+CREATE TABLE IF NOT EXISTS "builds" (
+	build_id SERIAL,
+	build_name VARCHAR(30) NOT NULL,
+	description TEXT,
+	hero_id INT NOT NULL,
+	"talentTreeId_level_1" VARCHAR(100) NOT NULL,
+	"talentTreeId_level_4" VARCHAR(100) NOT NULL,
+	"talentTreeId_level_7" VARCHAR(100) NOT NULL,
+	"talentTreeId_level_10" VARCHAR(100) NOT NULL,
+	"talentTreeId_level_13" VARCHAR(100) NOT NULL,
+	"talentTreeId_level_16" VARCHAR(100) NOT NULL,
+	"talentTreeId_level_20" VARCHAR(100) NOT NULL,
+	PRIMARY KEY (build_id)
+);
+
 -- Create a dummy account for testing.
 INSERT INTO accounts (username, password) 
 VALUES 	('Alice', 'abc123'), 
