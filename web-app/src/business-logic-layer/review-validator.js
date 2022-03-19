@@ -17,12 +17,12 @@ module.exports = function({reviewRepository}) {
 			if(!newReview.hasOwnProperty("heroesName")){
 				errors.push("heroes name is Missing")
 			}
-			if(newReview.heroesName.length < MIN_NAME_LENGTH){
-				errors.push("username is Too Short")
+			if(newReview.name.length < MIN_NAME_LENGTH){
+				errors.push("name is Too Short")
 				console.log("error min length")
 			}
-			if(MAX_NAME_LENGTH < newReview.heroesName.length){
-				errors.push("username is Too Long")
+			if(MAX_NAME_LENGTH < newReview.name.length){
+				errors.push("name is Too Long")
 				console.log("error max length")
 			}
 			reviewRepository.createReview(newReview, function(error, newReview){
@@ -36,6 +36,38 @@ module.exports = function({reviewRepository}) {
 					console.log("skickade till repository")
 				}
 			})
+		},
+		getErrorsNewInfo: function(newInfo, callback){
+			const errors = []
+			//console.log(newInfo)
+			// Validate username.
+			if(!newInfo.hasOwnProperty("name")){
+				errors.push("name is Missing")
+			}
+			if(!newInfo.hasOwnProperty("heroesName")){
+				errors.push("heroes name is Missing")
+			}
+			if(newInfo.name.length < MIN_NAME_LENGTH){
+				errors.push("name is Too Short")
+				console.log("error min length")
+			}
+			if(MAX_NAME_LENGTH < newInfo.name.length){
+				errors.push("name is Too Long")
+				console.log("error max length")
+			}
+			if(errors.length > 0) {
+				console.log(errors)
+			} else {
+				accountRepository.updateReview(newInfo, function(error, newInfo){
+					if(error){
+						console.log(error)
+						callback(error, null)
+					} else {
+						console.log("skickade till repo")
+						callback(error, newInfo)
+					}
+				})
+			}
 		}
 	}
 }

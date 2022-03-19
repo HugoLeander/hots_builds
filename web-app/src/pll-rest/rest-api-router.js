@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 
 const secretKey = 'kattunge' // måste vara samma secret key för encrypt och decrypt därav en constant 
 
-module.exports = function ({ accountManager, heroManager}) {
+module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
     //verifyToken middleware function
     function verifyToken(request, response, next) {
@@ -64,7 +64,6 @@ module.exports = function ({ accountManager, heroManager}) {
     router.post("/", function (request, response) {
 
         const newAccount = {
-            account_id: request.params.id,
             username: request.body.username,
             password: request.body.password,
             confirm_password: request.body.confirm_password
@@ -239,6 +238,76 @@ module.exports = function ({ accountManager, heroManager}) {
                 } else {
                     response.status(204).end()
                 }
+            }
+        })
+    })
+
+    router.post("/review", function(request, response) {
+
+        const newReview = {
+            hero_name: request.body.hero_name,
+            name: request.body.name,
+            rating: request.body.rating,
+            description: request.body.description
+        }
+
+        reviewManager.createReview(newReview, function(errors, review) {
+            if(errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                response.status(200).json(review)
+            }
+        })
+    })
+
+    router.get("/review/:id", function(request, response) {
+
+        const review_id = request.params.id
+
+        reviewManager.getReviewById(review_id, function(errors, review) {
+            if (errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                if (review) {
+                    response.status(200).json(review)
+                } else {
+                    response.status(404).end()
+                }
+            }
+        })
+    })
+
+    router.put("/review/:id", function(request, response) {
+
+        const newInfo = {
+            review_id: request.params.id,
+            hero_name: request.body.hero_name,
+            name: request.body.name,
+            rating: request.body.rating,
+            description: request.body.description
+        }
+
+        reviewManager.updateReview(newInfo, function(errors, review) {
+            if (!review) {
+                response.status(404).end()
+            } else {
+                if (errors.length > 0) {
+                    response.status(400).json(errors)
+                } else {
+                    response.status(204).end()
+                }
+            }
+        })
+    })
+    
+    router.delete("/review/:id", function(request, response) {
+        const review_id = request.params.id
+
+        reviewManager.deleteReviewById(review_id, function(errors) {
+            if(errors > 0){
+                response.status(400).json(errors)
+            } else {
+                response.status(204).end()
             }
         })
     })
