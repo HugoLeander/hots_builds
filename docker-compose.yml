@@ -35,5 +35,5 @@ services:
     volumes:
       - ./spa/nginx.conf:/etc/nginx/nginx.conf
       - ./spa/index.html:/data/www/index.html
-      - ./spa/js/navigation.js:/data/www/navigation.js
-      - ./spa/css/styles.css:/data/www/styles.css
+      - ./spa/static/js/navigation.js:/data/www/navigation.js
+      - ./spa/static/css/styles.css:/data/www/styles.css
