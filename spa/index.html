@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
     <script src="./navigation.js"></script>
     <title>SPA</title>
 </head>
+
 <body>
     <header>
         Accounts
@@ -44,24 +46,10 @@
         <div class="page" id="account-page">
             <h1>Account</h1>
             <div>ID: <span id="account-id"></span></div>
-            <div>Username:  <span id="account-username"></span></div>
-            <div>
-                <form action="/update" method="PUT">
-                    <div class="padding">
-                        <input type="text" name="update-username" id="update-username" placeholder="New Username">
-                    </div>
-                    <div class="padding">
-                        <input type="text" name="update-username" id="update-password" placeholder="New Password">
-                    </div>
-                    <div class="padding">
-                        <input type="text" name="update-username" id="confirm-update-password" placeholder="Confirm Password">
-                    </div>
-                    <div class="padding">
-                        <input type="submit" value="Update information">
-                    </div>
-                </form>
-            </div>
-            <!-- <a href="/update">Update information</a> -->
+            <div>Username: <span id="account-username"></span></div>
+            <ul id="update-link">
+
+            </ul>
         </div>
 
         <div class="page" id="login-page">
@@ -70,7 +58,7 @@
                 <input type="text" placeholder="Username" name="username" id="username" required>
                 <input type="password" placeholder="Password" name="password" id="password" required>
                 <div class="padding">
-                    <a href="/sign-up" class="sign-up">Sign up</a>
+                    <a href="/signUp" class="sign-up">Sign up</a>
                 </div>
                 <div class="padding">
                     <input type="submit" class="signUp_button" role="button" value="Sign In">
@@ -80,38 +68,55 @@
 
         <div class="page" id="signUp-page">
             <h1>Sign Up</h1>
-            <form action="/rest/sign-up" method="POST">
-                <input type="text" placeholder="Username" name="username" required>
-                <input type="password" placeholder="Password" name="password" required>
-                <input type="password" placeholder="Confirm Password" name="confirm_password" required>
+            <form action="/rest/sign-up" method="POST" id="signUpForm">
+                <input type="text" placeholder="Username" name="username" id="signUp_username" required>
+                <input type="password" placeholder="Password" name="password" id="signUp_password" required>
+                <input type="password" placeholder="Confirm Password" name="confirm_password"
+                    id="signUp_confirm_password" required>
                 <div class="padding">
                     <input type="submit" role="button" value="Sign Up">
                 </div>
             </form>
         </div>
 
-        <!-- <div class="page" id="update-page">
-            <form action="/update" method="PUT">
+        <div class="page" id="update-page">
+            <h1>Update Account</h1>
+            <form action="/rest/:id" method="PUT" id="updateForm">
                 <div class="padding">
-                    <input type="text" name="update-username" id="update-username" placeholder="New Username">
+                    <input type="text" name="update-username" id="update_username" placeholder="New Username">
                 </div>
                 <div class="padding">
-                    <input type="text" name="update-username" id="update-password" placeholder="New Password">
+                    <input type="text" name="update-username" id="update_password" placeholder="New Password">
                 </div>
                 <div class="padding">
-                    <input type="text" name="update-username" id="confirm-update-password" placeholder="Confirm Password">
+                    <input type="text" name="update-username" id="confirm_update_password"
+                        placeholder="Confirm Password">
                 </div>
                 <div class="padding">
                     <input type="submit" value="Update information">
                 </div>
             </form>
-        </div> -->
+        </div>
+
+        <div class="page" id="delete-page">
+            <h1>Delete account?</h1>
+            <h3>Are you really sure you want to delete this account?</h3>
+            <form action="/rest/:id" method="DELETE" id="deleteForm">
+                <div>
+                    <input type="submit" value="Yes" id="yes_button">
+                </div>
+                <div>
+                    <input type="submit" value="No" id="no_button">
+                </div>
+            </form>
+        </div>
 
         <div class="page" id="not-found-page">
             <h1>Not found page</h1>
             <p>This is the not found page</p>
         </div>
-        
+
     </main>
 </body>
+
 </html>

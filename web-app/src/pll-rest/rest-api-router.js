@@ -63,7 +63,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
     })
 
 
-    router.post("/", function (request, response) {
+    router.post("/signUp", function (request, response) {
 
         const newAccount = {
             username: request.body.username,
@@ -76,7 +76,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 response.status(400).json(errors)
             } else {
                 response.setHeader("Location", "/" + account)
-                response.status(200).json({account})
+                response.status(201).json({account})
             }
         })
     })
@@ -148,6 +148,34 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         }
     })
 
+
+    router.put("/:id", function (request, response) {
+
+        // if(verifyToken) { // om token = 
+        //     response.status(200)
+        // } else {
+        //     response.sendStatus(403)
+        // }
+        const newInfo = {
+            account_id: request.params.id,
+            username: request.body.username,
+            password: request.body.password,
+            confirm_password: request.body.confirm_password
+        }
+
+        accountManager.updateAccountInformation(newInfo, function (errors, account) {
+            if(!account) {
+                response.status(404).end()
+            } else {
+                if(errors.lenght > 0) {
+                    response.status(401).json(errors)
+                } else {
+                    response.status(204).end("account")
+                }
+            }
+        })
+    })
+
     router.post("/login", function (request, response) {
         const grant_type = request.body.grant_type
 
@@ -211,13 +239,13 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         })
     })
 
-    router.delete("/:id", verifyToken, function (request, response) {
+    router.delete("/:id", function (request, response) {
 
-        if(verifyToken) { // om token = 
-            response.status(200)
-        } else {
-            response.sendStatus(403)
-        }
+        // if(verifyToken) { // om token = 
+        //     response.status(200)
+        // } else {
+        //     response.sendStatus(403)
+        // }
 
         const account_id = request.params.id
         
@@ -225,38 +253,12 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
             if(errors > 0){
                 response.status(400).json(errors)
             } else {
-                response.status(204).end()
+                response.status(204).end() // om det tas bort
             }
         })
     })
 
-    router.put("/:id", verifyToken, function (request, response) {
-
-        if(verifyToken) { // om token = 
-            response.status(200)
-        } else {
-            response.sendStatus(403)
-        }
-        const newInfo = {
-            account_id: request.params.id,
-            username: request.body.username,
-            password: request.body.password,
-            confirm_password: request.body.confirm_password
-        }
-
-        accountManager.updateAccountInformation(newInfo, function (errors, account) {
-            if (!account) {
-                response.status(404).end()
-            } else {
-                if (errors.length > 0) {
-                    response.status(400).json(errors)
-                } else {
-                    response.status(204).end()
-                }
-            }
-        })
-    })
-
+    
     router.post("/review", function(request, response) {
 
         const newReview = {
@@ -315,6 +317,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         })
     })
     
+
     router.delete("/review/:id", function(request, response) {
         const review_id = request.params.id
 
