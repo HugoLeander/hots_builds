@@ -48,7 +48,7 @@ module.exports = function({models}) {
                 callback(['databaseError'], null)
 			}
         },
-        getReviewById: function(reviewId, callback){
+        getReviewById: async function(reviewId, callback){
             try {
                 const result = await models.review.findAll({
 					where: {
@@ -64,7 +64,7 @@ module.exports = function({models}) {
                 callback(['databaseError'], null)
             }
         },
-        updateReview: function (newInfo, callback) {
+        updateReview: async function (newInfo, callback) {
             try {
 				await models.review.update({ 
                     hero_name: newInfo.hero_name, 
@@ -83,7 +83,7 @@ module.exports = function({models}) {
                 callback(['databaseError'], null)
 			}
         },
-        deleteReviewById: function (id, callback) {
+        deleteReviewById: async function (id, callback) {
             try {
                 await models.reveiw.destroy({
                     where: {
