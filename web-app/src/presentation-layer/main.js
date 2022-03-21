@@ -34,7 +34,7 @@ container.register("variousRouter", awilix.asFunction(require('./routers/various
 container.register("accountRouter", awilix.asFunction(require('./routers/account-router')))
 container.register("heroesRouter", awilix.asFunction(require('./routers/heroes-router')))
 container.register("heroRouter", awilix.asFunction(require('./routers/hero-router')))
-container.register("restApi", awilix.asFunction(require('../pll-rest/rest-api-router')))
+container.register("restApi", awilix.asFunction(require('../rest-api/rest-api-router')))
 container.register("app", awilix.asFunction(app))
 
 //resolve the dependencies and run the app

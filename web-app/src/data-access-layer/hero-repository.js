@@ -13,9 +13,30 @@ module.exports = function ({db}) {
 		getAllHeroes: async function(callback) {
             console.log("all")
             try {
-                const heroes = await heroesTalents.loadHeroJSONFiles()
+                const result = await heroesTalents.loadHeroJSONFiles()
+
+                let heroes = {}
+                console.log("hello")
+
+                Object.entries(result).forEach(([key, eachHero]) => {
+                    console.log(`${key}: ${eachHero}`)
+
+                    console.log(eachHero)
+                    let hero = {
+                        id: eachHero.id,
+                        shortName: eachHero.shortName,
+                        name: eachHero.name,
+                        icon: eachHero.icon,
+                        role: eachHero.role,
+                        expandedRole: eachHero.expandedRole,
+                        type: eachHero.type
+                    }
+                    heroes[eachHero.name] = hero
+                })
+
                 callback([], heroes)
-            } catch {
+            } catch (error) {
+                console.log(error)
                 callback(['heroDatabaseError'], null)
             }
         },
@@ -24,7 +45,16 @@ module.exports = function ({db}) {
             console.log(hero_name)
             try {
                 const heroes = await heroesTalents.loadHeroJSONFiles()
-                const hero = heroes[hero_name]
+                const selectedHero = heroes[hero_name]
+                const hero = {
+                        id: selectedHero.id,
+                        shortName: selectedHero.shortName,
+                        name: selectedHero.name,
+                        icon: selectedHero.icon,
+                        role: selectedHero.role,
+                        expandedRole: selectedHero.expandedRole,
+                        type: selectedHero.type
+                }
                 callback([], hero)
             } catch {
                 callback(['heroDatabaseError'], null)

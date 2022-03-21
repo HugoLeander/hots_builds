@@ -27,8 +27,8 @@ module.exports = function({db}) {
         
         createReview: function (newReview, callback) {
         
-            const query = `INSERT INTO reviews (hero_name, name, rating, description) VALUES (?, ?, ?, ?)`
-            const values = [newReview.hero_name, newReview.name, newReview.rating, newReview.description]
+            const query = `INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES (?, ?, ?, ?, ?)`
+            const values = [newReview.hero_name, newReview.name, newReview.rating, newReview.description, newReview.author_account_id]
         
             db.dbConnection.query(query, values, function (error, newReview) {
                 if (error) {

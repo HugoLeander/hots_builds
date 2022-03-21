@@ -3,6 +3,7 @@ CREATE TABLE accounts (
 	account_id INT AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(50) NOT NULL,
 	password VARCHAR(30) NOT NULL,
+	is_admin BOOLEAN DEFAULT false,
 	CONSTRAINT usernameUnique UNIQUE (username) 
 );
 
@@ -11,7 +12,9 @@ CREATE TABLE reviews (
 	hero_name VARCHAR(30) NOT NULL,
 	name VARCHAR(30) NOT NULL,
 	rating INT NOT NULL,
-	description TEXT NOT NULL
+	description TEXT NOT NULL,
+	author_account_id INT NOT NULL,
+	FOREIGN KEY (author_account_id) REFERENCES accounts(account_id)
 );
 
 CREATE TABLE builds (
@@ -32,6 +35,8 @@ CREATE TABLE builds (
 INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
 INSERT INTO accounts (username, password) VALUES ("Hugo", "abc123");
 INSERT INTO accounts (username, password) VALUES ("Sebbe", "abc123");
+INSERT INTO accounts (username, password, is_admin) 
+VALUES 	('admin', 'admin', true)
 
 -- Create reviews for Cassia and Azmodan.
 INSERT INTO reviews (hero_name, name, rating, description) VALUES ("Murky", "Hugo", 4, "I think this build is very good");

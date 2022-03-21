@@ -31,6 +31,7 @@ module.exports = function({accountRepository}) {
 				accountRepository.createAccount(newUser, function(error, newUser){
 					if(error){
 						console.log(error)
+						callback(error, null)
 					} else {
 						callback(error, newUser)
 						console.log("skickade till repo")

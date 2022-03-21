@@ -21,6 +21,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 if(error) {
                     response.sendStatus(403)
                 } else {
+                    request.userInfo = authData
                     next()
                 }
             })
@@ -30,10 +31,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         }
     }
 
-
-
     const router = express.Router()
-
     router.use(bodyParser.json())
     router.use(express.urlencoded({
         extended: false,
@@ -52,7 +50,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         next()
     })
 
-    router.get("/", function (request, response) {
+    router.get("/Acounts", verifyToken, function (request, response) {
+        //TODO make sure user is admin
+
         accountManager.getAllAccounts(function (errors, accounts) {
             if (errors.length > 0) {
                 response.status(400).json(errors)
@@ -76,7 +76,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 response.status(400).json(errors)
             } else {
                 response.setHeader("Location", "/" + account)
-                response.status(201).json({account})
+                response.status(201).json(account)
             }
         })
     })
@@ -108,8 +108,6 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
     router.get('/build/:hero_name', async function(request, response){
 
-        console.log(name)
-
         heroManager.getBuildsByHeroName(name, function(errors, hero){
             if(errors.length > 0) {
                 response.status(400).json(errors)
@@ -119,7 +117,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         })
     })
 
-    router.post('/createBuild', async function(request, response){
+    router.post('/createBuild', verifyToken, async function(request, response){
+
+        //TODO make sure user is admin
 
         const newBuild = {
             hero_name: request.body.hero_name,
@@ -137,25 +137,20 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         })
     })
 
+
+
+//ONLY USED TO TEST TOKENS
     router.get("/login", verifyToken, function (request, response) {
-        if(verifyToken) {
-            response.status(200)
+        response.status(200)
             response.json({
                 message: "Welcome to login page",
             })
-        } else {
-            response.sendStatus(403)
-        }
     })
 
 
-    router.put("/:id", function (request, response) {
+    router.put("/:id", verifyToken, function (request, response) {
 
-        // if(verifyToken) { // om token = 
-        //     response.status(200)
-        // } else {
-        //     response.sendStatus(403)
-        // }
+        //TODO check that the id that we are trying to update is the id of the logged in user
         const newInfo = {
             account_id: request.params.id,
             username: request.body.username,
@@ -190,9 +185,10 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
                 if (user.password == userGotBack.password) {
                     const payload = {
+                        userInfo: user,
                         isLoggedIn: true
                     }
-                    jwt.sign({ user: userGotBack, payload }, secretKey, function (error, token) { // här blir man tilldelad en token
+                    jwt.sign(payload, secretKey, function (error, token) { // här blir man tilldelad en token
                         if(error){
                             console.log(error)
                             response.status(401).json("Invalid client error")
@@ -214,13 +210,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         }
     })
 
-    router.get("/:id", function (request, response) { // verifyToken funktionen används som middleware
+    router.get("/:id", verifyToken, function (request, response) { // verifyToken funktionen används som middleware
 
-        // if(verifyToken) { // om token = 
-        //     response.status(200)
-        // } else {
-        //     response.sendStatus(403)
-        // }
+        //TODO make sure the user we are geting is the user logged in
 
         const id = request.params.id
 
@@ -239,13 +231,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         })
     })
 
-    router.delete("/:id", function (request, response) {
+    router.delete("/:id", verifyToken, function (request, response) {
 
-        // if(verifyToken) { // om token = 
-        //     response.status(200)
-        // } else {
-        //     response.sendStatus(403)
-        // }
+        //TODO make sure the user id we are trying to delete is the logged in user
 
         const account_id = request.params.id
         
@@ -259,7 +247,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
     })
 
     
-    router.post("/review", function(request, response) {
+    router.post("/review", verifyToken, function(request, response) {
+
+        //TODO add user id to reviews
 
         const newReview = {
             hero_name: request.body.hero_name,
@@ -294,7 +284,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         })
     })
 
-    router.put("/review/:id", function(request, response) {
+    router.put("/review/:id", verifyToken, function(request, response) {
+
+        //TODO make sure the user that is logged in is the user that created the review we are trying to update
 
         const newInfo = {
             review_id: request.params.id,
@@ -318,7 +310,10 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
     })
     
 
-    router.delete("/review/:id", function(request, response) {
+    router.delete("/review/:id", verifyToken, function(request, response) {
+
+        //TODO make sure the user that is logged in is the user that created the review we are trying to delete
+
         const review_id = request.params.id
 
         reviewManager.deleteReviewById(review_id, function(errors) {

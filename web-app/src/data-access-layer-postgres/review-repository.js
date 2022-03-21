@@ -40,7 +40,8 @@ module.exports = function({models}) {
                     hero_name: newReview.heroesName,
                     name: newReview.name,
                     rating: newReview.rating,
-                    description: newReview.description
+                    description: newReview.description,
+                    author_account_id: newReview.author_account_id
                 })
                 callback([], newReview)
 			} catch (error) {
