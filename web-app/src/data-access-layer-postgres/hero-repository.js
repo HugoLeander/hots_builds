@@ -15,7 +15,7 @@ module.exports = function ({models}) {
             try {
                 const result = await heroesTalents.loadHeroJSONFiles()
 
-                let heroes = {}
+                let heroes = []
                 console.log("hello")
 
                 Object.entries(result).forEach(([key, eachHero]) => {
@@ -31,7 +31,7 @@ module.exports = function ({models}) {
                         expandedRole: eachHero.expandedRole,
                         type: eachHero.type
                     }
-                    heroes[eachHero.name] = hero
+                    heroes.push(hero)
                 })
 
                 callback([], heroes)

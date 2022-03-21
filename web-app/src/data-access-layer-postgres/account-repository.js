@@ -29,9 +29,7 @@ module.exports = function ({models }) {
 		Success value: The fetched account, or null if no account has that username.
 		*/
 		getAccountByUsername: async function (user, callback) {
-			console.log(user.username)
 			try {
-
 				const result = await models.account.findAll({
 					where: {
 						username: user.username

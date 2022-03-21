@@ -1,5 +1,8 @@
 const restAPI = "http://localhost:8080/rest/"
 
+let ACCESS_TOKEN = ""
+let ACCOUNT_USERNAME = ""
+
 document.addEventListener('DOMContentLoaded', function () {
 
 	const anchors = document.querySelectorAll('a')
@@ -149,8 +152,13 @@ function showPage(url) {
 
 async function loadAccountsPage() {
 
-	const response = await fetch(restAPI)
-
+	const response = await fetch(restAPI + "accounts", {
+		method: "GET",
+		headers: {
+			"Content-type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
+		}
+	})
 	// TODO: Check status code and act accordingly!
 
 	const humans = await response.json()
@@ -186,7 +194,13 @@ async function loadAccountsPage() {
 
 async function loadAccountPage(id) {
 
-	const response = await fetch(restAPI + id)
+	const response = await fetch(restAPI + id, {
+		method: "GET",
+		headers: {
+			"Content-type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
+		}
+	})
 	const account = await response.json()
 	console.log(account)
 
@@ -239,9 +253,6 @@ async function loadAccountPage(id) {
 
 // CRUD FUNCTIONS
 
-let ACCESS_TOKEN = ""
-let ACCOUNT_USERNAME = ""
-
 async function login(username, password) {
 
 	const model = {
@@ -262,7 +273,7 @@ async function login(username, password) {
 		case 200:
 			const responseBody = await response.json()
 
-			ACCESS_TOKEN = responseBody.token
+			ACCESS_TOKEN = responseBody.access_token
 			ACCOUNT_USERNAME = username
 
 			hideCurrentPage()
@@ -297,7 +308,7 @@ async function createAccount(account) {
 			const createdAccount = await response.json()
 
 			hideCurrentPage()
-			showPage('/')
+			showPage('/login')
 			break
 
 		case 401:
@@ -322,7 +333,8 @@ async function updateAccount(account) {
 	const response = await fetch(restAPI + account.account_id, {
 		method: "PUT",
 		headers: {
-			"Content-type": "application/json"
+			"Content-type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
 		},
 		body: JSON.stringify(account)
 	})
@@ -351,7 +363,8 @@ async function deleteAccount(id) {
 		method: "DELETE",
 		headers: {
 			"Accept": "application/json",
-			"Content-type": "application/json"
+			"Content-type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
 		}
 	})
 

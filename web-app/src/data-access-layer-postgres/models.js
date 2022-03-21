@@ -17,6 +17,10 @@ module.exports = function({db}) {
             password: {
               type: Sequelize.STRING,
               allowNull: false,
+            },
+            is_admin: {
+              type: Sequelize.BOOLEAN,
+              defaultValue: false,
             }
           }, {
             tablename: "accounts",
@@ -44,6 +48,10 @@ module.exports = function({db}) {
             description: {
             type: Sequelize.STRING,
             allowNull: false,
+            },
+            author_account_id: {
+              type: Sequelize.INTEGER,
+              allowNull: false,
             }
           }, {
             tablename: "reviews",
