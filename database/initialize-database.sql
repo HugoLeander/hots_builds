@@ -36,8 +36,8 @@ INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
 INSERT INTO accounts (username, password) VALUES ("Hugo", "abc123");
 INSERT INTO accounts (username, password) VALUES ("Sebbe", "abc123");
 INSERT INTO accounts (username, password, is_admin) 
-VALUES 	('admin', 'admin', true)
+VALUES 	('admin', 'admin', true);
 
 -- Create reviews for Cassia and Azmodan.
-INSERT INTO reviews (hero_name, name, rating, description) VALUES ("Murky", "Hugo", 4, "I think this build is very good");
-INSERT INTO reviews (hero_name, name, rating, description) VALUES ("Murky", "Sebbe", 5, "I like to split push with this build");
+INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES ("Murky", "Hugo", 4, "I think this build is very good", 1);
+INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES ("Murky", "Sebbe", 5, "I like to split push with this build", 2);

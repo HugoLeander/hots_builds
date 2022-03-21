@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "accounts" (
 	account_id SERIAL,
 	username VARCHAR(50) NOT NULL UNIQUE,
 	password VARCHAR(50) NOT NULL,
-	is_admin BOOLEAN DEFAULT false,
+	is_admin BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (account_id) 
 );
 
@@ -13,11 +13,8 @@ CREATE TABLE IF NOT EXISTS "reviews" (
 	name VARCHAR(30) NOT NULL,
 	rating INT NOT NULL,
 	description TEXT NOT NULL,
-	author_account_id INT NOT NULL,
+	author_account_id INT NOT NULL references accounts(account_id),
 	PRIMARY KEY (review_id)
-	CONSTRAINT fk_author
-      FOREIGN KEY(author_account_id) 
-	  REFERENCES accounts(account_id)
 );
 
 CREATE TABLE IF NOT EXISTS "builds" (
@@ -42,9 +39,9 @@ VALUES 	('Alice', 'abc123'),
 		('Sebbe', 'abc123');
 
 INSERT INTO accounts (username, password, is_admin) 
-VALUES 	('admin', 'admin', true)
+VALUES 	('admin', 'admin', TRUE);
 
 -- Create reviews for Cassia and Azmodan.
-INSERT INTO reviews (hero_name, name, rating, description) 
-VALUES 	('Thrall', 'Hugo', 4, 'I think this build is very good'),
-		('Murky', 'Sebbe', 5, 'I like to split push with this build');
+INSERT INTO reviews (hero_name, name, rating, description, author_account_id) 
+VALUES 	('Thrall', 'Hugo', 4, 'I think this build is very good', 1),
+		('Murky', 'Sebbe', 5, 'I like to split push with this build', 2);
