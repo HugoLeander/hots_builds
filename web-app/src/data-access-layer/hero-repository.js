@@ -11,14 +11,12 @@ function countArray(arr) {
 module.exports = function ({db}) {
 	return {
 		getAllHeroes: async function(callback) {
-            console.log("all")
             try {
                 const result = await heroesTalents.loadHeroJSONFiles()
 
                 let heroes = []
 
                 Object.entries(result).forEach(([key, eachHero]) => {
-                    console.log(`${key}: ${eachHero}`)
 
                     let hero = {
                         id: eachHero.id,
@@ -40,7 +38,6 @@ module.exports = function ({db}) {
         },
  
         getHeroByName: async function(hero_name, callback) {
-            console.log(hero_name)
             try {
                 const heroes = await heroesTalents.loadHeroJSONFiles()
                 const selectedHero = heroes[hero_name]

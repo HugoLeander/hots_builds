@@ -17,8 +17,12 @@ module.exports = function({reviewRepository, reviewValidator}) {
             reviewRepository.getReviewById(reviewId, callback)
         },
 
+		getAllReviewsByAuthorId: function(authorId, callback) {
+			reviewRepository.getAllReviewsByAuthorId(authorId, callback)
+		},
+
         updateReview: function (newInfo, callback) {
-            reviewValidator.updateReview(newInfo, callback)
+            reviewValidator.updateReview(newInfo, callback) 
         },
 
         deleteReviewById: function (id, callback) {

@@ -1,7 +1,9 @@
 const restAPI = "http://localhost:8080/rest/"
 
 let ACCESS_TOKEN = ""
-let ACCOUNT_USERNAME = ""
+let ACCOUNT_ID = ""
+let IS_ADMIN = false
+let IS_LOGGED_IN = false
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -18,11 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			hideCurrentPage()
 			showPage(url)
-
 		})
-
 	}
 
+	updateNav(IS_LOGGED_IN)
 	showPage(location.pathname)
 
 })
@@ -30,10 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
 window.addEventListener('popstate', function () {
 
 	hideCurrentPage()
+	console.log("pop")
+	updateNav(IS_LOGGED_IN)
 	showPage(location.pathname)
 
 })
-
 
 /// FUNCTIONS
 
@@ -51,10 +53,6 @@ function showPage(url) {
 			nextPageId = 'start-page'
 			break
 
-		case '/about':
-			nextPageId = 'about-page'
-			break
-
 		case '/accounts':
 			nextPageId = 'accounts-page'
 			loadAccountsPage()
@@ -70,9 +68,13 @@ function showPage(url) {
 
 				const username = document.getElementById("username").value
 				const password = document.getElementById("password").value
-				console.log(username, password)
 				login(username, password)
 			})
+			break
+
+		case '/logout':
+			nextPageId = 'start-page'
+			logout()
 			break
 
 		case '/signUp':
@@ -96,17 +98,41 @@ function showPage(url) {
 			})
 			break
 
+		case '/createReview':
+			nextPageId = 'create-review-page'
+
+			const reviewForm = document.getElementById("createReviewForm")
+
+			reviewForm.addEventListener("submit", function (event) {
+				event.preventDefault()
+
+				const createReview_hero_name = document.getElementById("review_hero_name").value
+				const createReview_name = document.getElementById("review_name").value
+				const createReview_rating = document.getElementById("review_rating").value
+				const createReview_description = document.getElementById("review_description").value
+
+				const newReview = {
+					hero_name: createReview_hero_name,
+					name: createReview_name,
+					rating: createReview_rating,
+					description: createReview_description,
+				}
+
+				createReview(newReview)
+			})
+			break
+
 		default:
 			if (url.startsWith("/accounts/")) {
 				const [empty, humans, id] = url.split("/")
 				nextPageId = 'account-page'
 				loadAccountPage(id)
 
-			} else if (url.startsWith("/update/")) {
+			} else if (url.startsWith("/updateAccount/")) {
 				const [empty, humans, id] = url.split("/")
-				nextPageId = 'update-page'
+				nextPageId = 'update-account-page'
 
-				const updateForm = document.getElementById("updateForm")
+				const updateForm = document.getElementById("updateAccountForm")
 
 				updateForm.addEventListener("submit", function (event) {
 					event.preventDefault()
@@ -125,20 +151,78 @@ function showPage(url) {
 					updateAccount(updatedAccount)
 
 				})
-			} else if (url.startsWith("/delete/")) {
+			} else if (url.startsWith("/deleteAccount/")) {
 				const [empty, humans, id] = url.split("/")
-				nextPageId = 'delete-page'
+				nextPageId = 'delete-account-page'
 
-				const deleteForm = document.getElementById("deleteForm")
+				const deleteForm = document.getElementById("deleteAccountForm")
 				const yesButton = document.getElementById("yes_button")
 				const noButton = document.getElementById("no_button")
 
 				deleteForm.addEventListener("submit", function (event) {
 					event.preventDefault()
-
-					deleteAccount(id)
+					if(event.submitter.defaultValue == "No") {
+						hideCurrentPage()
+						showPage("/accounts/" + id)
+					}else{
+						deleteAccount(id)
+					}
 				})
 				break
+			}
+			else if (url.startsWith("/reviews/")) {
+				const [empty, review, authorId] = url.split("/")
+				nextPageId = 'your-reviews-page'
+				loadReviewsPage(authorId)
+			}
+			else if (url.startsWith("/review/")) {
+				const [empty, review, id] = url.split("/")
+				nextPageId = 'review-page'
+				loadReviewPage(id)
+
+			} else if (url.startsWith("/updateReview/")) {
+				const [empty, humans, id] = url.split("/")
+				nextPageId = 'update-review-page'
+
+				const updateForm = document.getElementById("updateReviewForm")
+
+				updateForm.addEventListener("submit", function (event) {
+					event.preventDefault()
+
+					const updateReview_name = document.getElementById("review_update_name").value
+					const updateReview_rating = document.getElementById("review_update_rating").value
+					const updateReview_description = document.getElementById("review_update_description").value
+
+					const updatedReview = {
+						name: updateReview_name,
+						rating: updateReview_rating,
+						description: updateReview_description,
+					}
+
+					console.log(updatedReview)
+
+					updateReview(updatedReview)
+
+				})
+			} else if (url.startsWith("/deleteReview/")) {
+				const [empty, humans, id] = url.split("/")
+				nextPageId = 'delete-review-page'
+
+				const deleteForm = document.getElementById("deleteReviewForm")
+				const yesButton = document.getElementById("delete_review_yes_button")
+				const noButton = document.getElementById("delete_review_no_button")
+
+				deleteForm.addEventListener("submit", function (event) {
+					event.preventDefault()
+
+					if(event.submitter.defaultValue == "No") {
+						hideCurrentPage()
+						showPage("/review/" + id)
+					}else{
+						console.log("deleted")
+						deleteReview(id)
+					}
+				})
 			}
 			else {
 				nextPageId = 'not-found-page'
@@ -207,12 +291,27 @@ async function loadAccountPage(id) {
 	const UlArr = document.getElementById('update-link')
 	UlArr.innerText = ""
 
+	const reviewsLi = document.createElement('Li')
 	const updateLi = document.createElement('li')
 	const deleteLi = document.createElement('li')
 
+	const anchorReviews = document.createElement('button')
+	anchorReviews.innerText = "View all reviews"
+	anchorReviews.setAttribute('href', "/reviews/" + id)
+	anchorReviews.addEventListener('click', function (event) {
+		event.preventDefault()
+
+		const reviewsUrl = anchorReviews.getAttribute('href')
+
+		history.pushState(null, "", reviewsUrl)
+
+		hideCurrentPage()
+		showPage(reviewsUrl)
+	})
+
 	const anchorUpdate = document.createElement('button')
 	anchorUpdate.innerText = "Update account information"
-	anchorUpdate.setAttribute('href', "/update/" + id)
+	anchorUpdate.setAttribute('href', "/updateAccount/" + id)
 	anchorUpdate.addEventListener('click', function (event) {
 		event.preventDefault()
 
@@ -226,7 +325,110 @@ async function loadAccountPage(id) {
 
 	const anchorDelete = document.createElement('button')
 	anchorDelete.innerText = "Delete this account"
-	anchorDelete.setAttribute('href', "/delete/" + id)
+	anchorDelete.setAttribute('href', "/deleteAccount/" + id)
+	anchorDelete.addEventListener('click', function (event) {
+		event.preventDefault()
+
+		const deleteURL = anchorDelete.getAttribute('href')
+
+		history.pushState(null, "", deleteURL)
+
+		hideCurrentPage()
+		showPage(deleteURL)
+	})
+
+	reviewsLi.appendChild(anchorReviews)
+	updateLi.appendChild(anchorUpdate)
+	deleteLi.appendChild(anchorDelete)
+
+	if(IS_ADMIN) {
+		UlArr.appendChild(reviewsLi)
+	}
+	UlArr.appendChild(updateLi)
+	UlArr.appendChild(deleteLi)
+
+	document.getElementById('account-id').innerText = account.account_id
+	document.getElementById('account-username').innerText = account.username
+	//document.getElementById('account-password').innerText = account.password
+
+}
+
+async function loadReviewsPage(authorId) {
+
+	const response = await fetch(restAPI + '/reviews/' + authorId, {
+		method: "GET",
+		headers: {
+			"Content-type": "application/json",
+		}
+	})
+	// TODO: Check status code and act accordingly!
+
+	const reviews = await response.json()
+
+	const yourReviewsUl = document.getElementById('your-reviews')
+	yourReviewsUl.innerText = ""
+
+	for (const review of reviews) {
+
+		const li = document.createElement('li')
+
+		const anchor = document.createElement('a')
+		anchor.innerText = review.hero_name + ": " + review.description
+
+		anchor.setAttribute('href', "/review/" + review.review_id)
+		anchor.addEventListener('click', function (event) {
+			event.preventDefault()
+
+			const url = anchor.getAttribute('href')
+
+			history.pushState(null, "", url)
+
+			hideCurrentPage()
+			showPage(url)
+		})
+		li.appendChild(anchor)
+
+		yourReviewsUl.appendChild(li)
+
+	}
+
+}
+
+async function loadReviewPage(id) {
+
+	const response = await fetch(restAPI + 'review/' + id, {
+		method: "GET",
+		headers: {
+			"Content-type": "application/json",
+		}
+	})
+	const review = await response.json()
+
+//TODO everything below needs to be changed
+
+	const crudUl = document.getElementById('crud-links')
+	crudUl.innerText = ""
+
+	const updateLi = document.createElement('li')
+	const deleteLi = document.createElement('li')
+
+	const anchorUpdate = document.createElement('button')
+	anchorUpdate.innerText = "Update review information"
+	anchorUpdate.setAttribute('href', "/updateReview/" + id)
+	anchorUpdate.addEventListener('click', function (event) {
+		event.preventDefault()
+
+		const updateUrl = anchorUpdate.getAttribute('href')
+
+		history.pushState(null, "", updateUrl)
+
+		hideCurrentPage()
+		showPage(updateUrl)
+	})
+
+	const anchorDelete = document.createElement('button')
+	anchorDelete.innerText = "Delete this review"
+	anchorDelete.setAttribute('href', "/deleteReview/" + id)
 	anchorDelete.addEventListener('click', function (event) {
 		event.preventDefault()
 
@@ -241,17 +443,14 @@ async function loadAccountPage(id) {
 	updateLi.appendChild(anchorUpdate)
 	deleteLi.appendChild(anchorDelete)
 
-	UlArr.appendChild(updateLi)
-	UlArr.appendChild(deleteLi)
-
-	document.getElementById('account-id').innerText = account.account_id
-	document.getElementById('account-username').innerText = account.username
-	//document.getElementById('account-password').innerText = account.password
-
+	crudUl.appendChild(updateLi)
+	crudUl.appendChild(deleteLi)
+	
+	document.getElementById('review-hero-name').innerText = review.hero_name
+	document.getElementById('review-name').innerText = review.name
+	document.getElementById('review-rating').innerText = review.rating
+	document.getElementById('review-description').innerText = review.description
 }
-
-
-// CRUD FUNCTIONS
 
 async function login(username, password) {
 
@@ -274,9 +473,12 @@ async function login(username, password) {
 			const responseBody = await response.json()
 
 			ACCESS_TOKEN = responseBody.access_token
-			ACCOUNT_USERNAME = username
+			ACCOUNT_ID = responseBody.account_id
+			IS_ADMIN = responseBody.is_admin 
+			IS_LOGGED_IN = true
 
 			hideCurrentPage()
+			updateNav(IS_LOGGED_IN)
 			showPage('/')
 
 			break
@@ -289,10 +491,80 @@ async function login(username, password) {
 		case 400:
 			//handle error
 			break
-
 	}
-
 }
+
+function logout() {
+	ACCESS_TOKEN = ""
+	ACCOUNT_ID = ""
+	IS_ADMIN = false
+	IS_LOGGED_IN = false
+	updateNav(IS_LOGGED_IN)
+	showPage('/')
+}
+
+function updateNav(isLoggedIn) {
+	const navUl = document.getElementById('nav-ul')
+	navUl.innerText = ""
+
+	if(isLoggedIn) {
+		const navLinks = [
+			{link: "/", desc: "Start"},
+			{link: "/accounts/"+ACCOUNT_ID, desc: "Your account"},
+			{link: "/reviews/"+ACCOUNT_ID, desc: "Your reviews"},
+			{link: "/createReview", desc: "Create a new review"},
+			{link: "/logout", desc: "Logout"}
+		]
+		if(IS_ADMIN) {
+			navLinks.push({link: "/accounts", desc: "Show all accounts"})
+		}
+		for (const link of navLinks) {
+			const li = document.createElement('li')
+			const anchor = document.createElement('a')
+			anchor.innerText = link.desc
+
+			anchor.setAttribute('href', link.link)
+			anchor.addEventListener('click', function (event) {
+				event.preventDefault()
+
+				const url = anchor.getAttribute('href')
+				history.pushState(null, "", url)
+
+				hideCurrentPage()
+				showPage(url)
+			})
+		li.appendChild(anchor)
+		navUl.appendChild(li)
+		}
+	}else {
+		const navLinks = [
+			{link: "/", desc: "Start"},
+			{link: "/login"+ACCOUNT_ID, desc: "Login"},
+			{link: "/signUp"+ACCOUNT_ID, desc: "Sign up"}
+		]
+		for (const link of navLinks) {
+			const li = document.createElement('li')
+			const anchor = document.createElement('a')
+			anchor.innerText = link.desc
+
+			anchor.setAttribute('href', link.link)
+			anchor.addEventListener('click', function (event) {
+				event.preventDefault()
+
+				const url = anchor.getAttribute('href')
+
+				history.pushState(null, "", url)
+
+				hideCurrentPage()
+				showPage(url)
+			})
+		li.appendChild(anchor)
+		navUl.appendChild(li)
+		}
+	}
+}
+
+// CRUD FUNCTIONS
 
 async function createAccount(account) {
 	const response = await fetch(restAPI + "signUp", {
@@ -372,6 +644,96 @@ async function deleteAccount(id) {
 		case 204: // om det togs bort
 			hideCurrentPage()
 			showPage('/accounts')
+			break
+
+		case 400:
+			//handle errors
+			break
+	}
+}
+
+async function createReview(review) {
+	const response = await fetch(restAPI + "review", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
+		},
+		body: JSON.stringify(review)
+	})
+
+	switch (response.status) {
+		case 201:
+			const createdReview = await response.json()
+			const reviewId = createdReview.review_id
+
+			hideCurrentPage()
+			showPage('/review/'+reviewId)
+			break
+
+		case 401:
+			//handle error
+			break
+
+		case 400:
+			//handle error
+			break
+
+		case 500:
+			//handle error
+			break
+
+		default:
+			//handle error
+			break
+	}
+}
+
+async function updateReview(review) {
+	const response = await fetch(restAPI + 'review/' + review.review_id, {
+		method: "PUT",
+		headers: {
+			"Content-type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
+		},
+		body: JSON.stringify(review)
+	})
+
+	switch (response.status) {
+		case 204:
+			console.log("Carried out the request")
+			break
+
+		case 404:
+			// handle errors
+			//const account = await response.json()
+			// console.log(account)
+			// hideCurrentPage()
+			// showPage('/accounts/' + account.account_id)
+			// break
+
+		case 401:
+			// handle errors
+			break
+	}
+}
+
+async function deleteReview(id) {
+	console.log(restAPI + 'review/' + id)
+	const response = await fetch(restAPI + 'review/' + id, {
+		method: "DELETE",
+		headers: {
+			"Accept": "application/json",
+			"Content-type": "application/json",
+			"Authorization": "Bearer " + ACCESS_TOKEN
+		}
+	})
+
+	switch (response.status) {
+		case 204: // om det togs bort
+			hideCurrentPage()
+			//show some other page than /
+			showPage('/')
 			break
 
 		case 400:

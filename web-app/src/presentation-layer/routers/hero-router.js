@@ -46,22 +46,20 @@ module.exports = function({reviewManager, heroManager}) {
         response.render("create-review.hbs", model)
     })
 
-    router.get("/", function(request, response){
-        response.render("create-review.hbs")
-    })
-
     router.post("/:hero_name/review", function(request, response){
         
         //TODO add validation so that the hero exists
         //TODO fix how we use the name of the hero when creating reviews
 
         const name = request.params.hero_name
+        console.log(request)
 
         const newReview = {
             hero_name: name,
             name: request.body.name,
             rating: request.body.rating,
-            description: request.body.description 
+            description: request.body.description,
+            author_account_id: request.session.account_id
         };
         
         reviewManager.createReview(newReview, function(errors, review){

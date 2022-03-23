@@ -28,25 +28,24 @@ module.exports = function ({models }) {
 		Possible errors: databaseError
 		Success value: The fetched account, or null if no account has that username.
 		*/
-		getAccountByUsername: async function (user, callback) {
+		getAccountByUsername: async function (username, callback) {
 			try {
 				const result = await models.account.findAll({
 					where: {
-						username: user.username
+						username: username
 					},
 					limit: 1
 				});
 				const foundUser = result[0].dataValues
 
-				callback([], foundUser)
+				callback(null, foundUser)
 			} catch (error) {
-				callback(['databaseError'], null)
+				callback(error, null)
 			}
 		},
 
 		getAccountById: async function (user, callback) {
 			
-			console.log(user.account_id)
 			try {
 				const result = await models.account.findAll({
 					where: {
@@ -71,12 +70,12 @@ module.exports = function ({models }) {
 				callback([], newUser)
 			} catch (error) {
 				// TODO: Look for usernameUnique violation.
-				callback(['databaseError'], null)
+				callback(error, null)
 			}
 		},
 
 		deleteAccountById: async function(id, callback) {
-
+ 
 			try {
 				await models.account.destroy({
 					where: {

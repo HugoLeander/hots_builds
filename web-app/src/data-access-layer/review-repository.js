@@ -78,6 +78,17 @@ module.exports = function({db}) {
                     callback([])
                 }
             })
+        },
+        getAllReviewsByAuthorId: function(authorId, callback) {
+            const query = "SELECT * FROM reviews WHERE author_account_id = ?"
+            const values = [authorId]
+            db.dbConnection.query(query, values, function(error, reviews){
+                if(error) {
+                    callback(error, null)
+                } else {
+                    callback([], reviews)
+                }
+            })
         }
 
     }

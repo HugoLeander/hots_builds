@@ -10,11 +10,11 @@ module.exports = function({reviewRepository}) {
 			const errors = []
 		
 			console.log(newReview)
-			// Validate username.
+			// Validate username.  
 			if(!newReview.hasOwnProperty("name")){
 				errors.push("name is Missing")
 			}
-			if(!newReview.hasOwnProperty("heroesName")){
+			if(!newReview.hasOwnProperty("hero_name")){
 				errors.push("heroes name is Missing")
 			}
 			if(newReview.name.length < MIN_NAME_LENGTH){
@@ -32,8 +32,8 @@ module.exports = function({reviewRepository}) {
 					console.log("crashar i validator")
 				}
 				else {
-					callback(errors, newReview)
 					console.log("skickade till repository")
+					callback(errors, newReview)
 				}
 			})
 		},
@@ -58,7 +58,7 @@ module.exports = function({reviewRepository}) {
 			if(errors.length > 0) {
 				console.log(errors)
 			} else {
-				accountRepository.updateReview(newInfo, function(error, newInfo){
+				accountRepository.updateReview(newInfo, function(error, newInfo){ 
 					if(error){
 						console.log(error)
 						callback(error, null)

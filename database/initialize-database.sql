@@ -2,7 +2,7 @@
 CREATE TABLE accounts (
 	account_id INT AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(50) NOT NULL,
-	password VARCHAR(30) NOT NULL,
+	password VARCHAR(100) NOT NULL,
 	is_admin BOOLEAN DEFAULT false,
 	CONSTRAINT usernameUnique UNIQUE (username) 
 );
@@ -14,7 +14,7 @@ CREATE TABLE reviews (
 	rating INT NOT NULL,
 	description TEXT NOT NULL,
 	author_account_id INT NOT NULL,
-	FOREIGN KEY (author_account_id) REFERENCES accounts(account_id)
+	FOREIGN KEY (author_account_id) REFERENCES accounts(account_id) ON DELETE CASCADE
 );
 
 CREATE TABLE builds (
@@ -32,12 +32,9 @@ CREATE TABLE builds (
 );
 
 -- Create a dummy account for testing.
-INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
-INSERT INTO accounts (username, password) VALUES ("Hugo", "abc123");
-INSERT INTO accounts (username, password) VALUES ("Sebbe", "abc123");
 INSERT INTO accounts (username, password, is_admin) 
-VALUES 	('admin', 'admin', true);
+VALUES 	('admin', '$2b$10$rv3Vmhl6e.FjIsrilDbGcuv6z.2CYAKw3vt2OYglNjV3tYCMxlW7i', true);
 
 -- Create reviews for Cassia and Azmodan.
-INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES ("Murky", "Hugo", 4, "I think this build is very good", 1);
-INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES ("Murky", "Sebbe", 5, "I like to split push with this build", 2);
+INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES ("Murky", "admin", 4, "I think this build is very good", 1);
+INSERT INTO reviews (hero_name, name, rating, description, author_account_id) VALUES ("Murky", "admin", 5, "I like to split push with this build", 1);

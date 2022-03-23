@@ -31,23 +31,23 @@ module.exports = function({db}){
 
 			db.dbConnection.query(query, values, function (error, account) {
 				if (error) {
-					callback(['databaseError'], null)
+					callback(error, null)
 				} else {
 					callback([], account[0])
 				}
 			})
 		},
 
-		getAccountByUsername: function (user, callback) { // den finns
+		getAccountByUsername: function (username, callback) { // den finns
 
 			const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
-			const values = [user.username]
+			const values = [username]
 		
 			db.dbConnection.query(query, values, function (error, accounts) {
 				if (error) {
-					callback(['databaseError'], null)
+					callback(error, null)
 				} else {
-					callback([], accounts[0])
+					callback(error, accounts[0])
 				}
 			})
 		},
@@ -58,9 +58,9 @@ module.exports = function({db}){
 			
 			db.dbConnection.query(query, values, function(error, account) {
 				if(error) {
-					callback(['databaseError'], null)
+					callback(error, null)
 				} else {
-					callback([])
+					callback([], account)
 				}
 			})
 		},
@@ -74,7 +74,7 @@ module.exports = function({db}){
 			db.dbConnection.query(query, values, function (error, newUser) {
 				if (error) {
 					// TODO: Look for usernameUnique violation.
-					callback(['databaseError'], null)
+					callback(error, null)
 				} else {
 					callback([], newUser)
 				}

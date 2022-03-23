@@ -17,8 +17,8 @@ module.exports = function({accountRepository}) {
 				errors.push("username is Too Short")
 				console.log("error min length")
 			}
-			if(MAX_USERNAME_LENGTH < newUser.username.length){
-				errors.push("username is Too Long")
+			if(MAX_USERNAME_LENGTH < newUser.username.length){    
+				errors.push("username is Too Long") 
 				console.log("error max length")
 			}
 			if(newUser.password != newUser.confirm_password){
@@ -26,17 +26,9 @@ module.exports = function({accountRepository}) {
 				console.log("passwords dont match")
 			}
 			if(errors.length > 0) {
-				console.log(errors)
+				callback(errors, newUser)
 			} else {
-				accountRepository.createAccount(newUser, function(error, newUser){
-					if(error){
-						console.log(error)
-						callback(error, null)
-					} else {
-						callback(error, newUser)
-						console.log("skickade till repo")
-					}
-				})
+				callback(null, newUser)
 			}
 		},
 
@@ -44,7 +36,7 @@ module.exports = function({accountRepository}) {
 			const errors = []
 			//console.log(newInfo)
 			// Validate username.
-			if(!newInfo.hasOwnProperty("username")){
+			if(!newInfo.hasOwnProperty("username")){ 
 				errors.push("username is Missing")
 			}
 			if(newInfo.username.length < MIN_USERNAME_LENGTH){
@@ -59,20 +51,11 @@ module.exports = function({accountRepository}) {
 				errors.push("Passwords don't match")
 				console.log("passwords dont match")
 			}
-
-			if(errors.length > 0) {
-				console.log(errors)
+			if(errors.length > 0) { 
+				callback(errors, newInfo)
 			} else {
-				accountRepository.updateAccountInformation(newInfo, function(error, newInfo){
-					if(error){
-						console.log(error)
-						callback(error)
-					} else {
-						console.log("skickade till repo")
-						callback(error, newInfo)
-					}
-				})
-			}
+				callback(null, newInfo)
+			}	
 		}
 	}
 }

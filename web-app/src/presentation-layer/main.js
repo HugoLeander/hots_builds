@@ -28,6 +28,7 @@ container.register("accountValidator", awilix.asFunction(require('../business-lo
 container.register("reviewManager", awilix.asFunction(require('../business-logic-layer/review-manager')))
 container.register("reviewValidator", awilix.asFunction(require('../business-logic-layer/review-validator')))
 container.register("heroManager", awilix.asFunction(require('../business-logic-layer/hero-manager')))
+container.register("encryptionManager", awilix.asFunction(require('../business-logic-layer/encryption-manager')))
 
 //presentation-layer
 container.register("variousRouter", awilix.asFunction(require('./routers/various-router')))

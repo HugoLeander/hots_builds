@@ -24,19 +24,20 @@ router.post("/sign-in", function(request, response){
 		password: request.body.password
 	}
 
-	accountManager.getAccountByUsername(user, function(errors, userGotBack){
+	accountManager.loginAccount(user, function(error, loggedInUser) {
 		const model = {
-			errors: errors
+			errors: error
 		}
-		if(user.password == userGotBack.password){
-			request.session.isLoggedIn = true
-			response.redirect('/')
-			console.log("Successfull login")
-		} else {
+		if(error) {
 			response.render("accounts-sign-up.hbs", model)
 			console.log("could not login")
+		} else {
+			request.session.isLoggedIn = true
+			request.session.account_id = loggedInUser.account_id
+			response.redirect('/')
+			console.log("Successfull login")
 		}
-	})
+	}) 
 })
 
 router.get("/sign-up", function(request, response){
@@ -62,7 +63,7 @@ router.post("/sign-up", function(request, response){
 			response.render('accounts-sign-up.hbs', model)
 		} else {
 			console.log(user)
-			response.redirect("/sign-in")
+			response.redirect("/accounts/sign-in")
 		}
 	})
 })

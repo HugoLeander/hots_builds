@@ -79,7 +79,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 response.status(400).json(errors)
             } else {
                 response.setHeader("Location", "/" + account)
-                response.status(201).json()
+                response.status(201).json("account was created")
             }
         })
     })
@@ -100,12 +100,12 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
         const name = request.params.hero_name
 
-        heroManager.getHeroByName(name, function(errors, hero){
+        heroManager.getHeroByName(name, function(errors, hero){ 
             if(errors.length > 0) {
                 response.status(400).json(errors)
             } else {
                 response.status(200).json(hero)
-            }
+            } 
         })
     })
 
@@ -142,17 +142,6 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         }
     })
 
-
-
-//ONLY USED TO TEST TOKENS
-    router.get("/login", verifyToken, function (request, response) {
-        response.status(200)
-            response.json({
-                message: "Welcome to login page",
-            })
-    })
-
-
     router.put("/:id", verifyToken, function (request, response) {
 
         if (request.body.userInfo.account_id == request.params.id || request.body.userInfo.is_admin) {
@@ -188,32 +177,33 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 username: request.body.username,
                 password: request.body.password
             }
-
-            accountManager.getAccountByUsername(user, function (errors, userGotBack) {
-
-                if (user.password == userGotBack.password) {
-                    const payload = {
-                        account_id: userGotBack.account_id,
-                        username: userGotBack.username,
-                        is_admin: userGotBack.is_admin,
-                        is_logged_in: true
-                    }
-
-                    jwt.sign(payload, secretKey, function (error, token) { // här blir man tilldelad en token
-                        if(error){
-                            console.log(error)
-                            response.status(401).json("Invalid client error")
-                        } else {
-                            response.status(200).json({
-                                "access_token": token
-                            }) 
+        
+            accountManager.loginAccount(user, function(error, userGotBack) {
+                if(userGotBack) {   
+                        const payload = {
+                            account_id: userGotBack.account_id,
+                            username: userGotBack.username,
+                            is_admin: userGotBack.is_admin, 
+                            is_logged_in: true
                         }
-                    })
-                }
-                else {
-                    response.status(401).json(errors)
-                }
-            })
+
+                        jwt.sign(payload, secretKey, function (error, token) { // här blir man tilldelad en token
+                            if(error){
+                                console.log(error) 
+                                response.status(401).json("Invalid client error")
+                            } else {
+                                response.status(200).json({
+                                    "access_token": token,
+                                    account_id: userGotBack.account_id,
+                                    is_admin: userGotBack.is_admin
+                                }) 
+                            }
+                        })
+            }
+            else {
+                response.status(401).json(error)
+            }
+        })
         }
         else {
             response.status(400).json({ error: "unspported_grant_type"})
@@ -260,7 +250,6 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
             response.sendStatus(403)
         }
     })
-
     
     router.post("/review", verifyToken, function(request, response) {
 
@@ -273,9 +262,12 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         }
 
         reviewManager.createReview(newReview, function(errors, review) {
+           
             if(errors.length > 0) {
+                console.log(errors)
                 response.status(400).json(errors)
             } else {
+                console.log("created review")
                 response.status(200).json(review)
             }
         })
@@ -329,7 +321,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                         })
                     } else{
                         response.sendStatus(403)
-                    }
+                    } 
                 }
             } 
         })   
@@ -339,9 +331,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
     router.delete("/review/:id", verifyToken, function(request, response) {
 
         const review_id = request.params.id
-
         reviewManager.getReviewById(review_id, function(errors, review) {
-
             if (!review) {
                 response.status(404).end()
             } else {
@@ -350,7 +340,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 } else {
                     if (request.body.userInfo.account_id == review_id || request.body.userInfo.is_admin) {
                         reviewManager.deleteReviewById(review_id, function(errors) {
-                            if(errors > 0){
+                            if(errors.length > 0){
                                 response.status(400).json(errors)
                             } else {
                                 response.status(204).end()
@@ -359,6 +349,23 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                     } else {
                         response.sendStatus(403)
                     } 
+                }
+            }
+        })
+    })
+
+    router.get("/reviews/:id", function(request, response) {
+        console.log("test")
+        const account_id = request.params.id
+
+        reviewManager.getAllReviewsByAuthorId(account_id, function(error, reviews) {
+            if (error.length > 0) {
+                response.status(400).json(error)
+            } else {
+                if (reviews) {
+                    response.status(200).json(reviews)
+                } else {
+                    response.status(404).end()
                 }
             }
         })

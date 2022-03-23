@@ -11,17 +11,13 @@ function countArray(arr) {
 module.exports = function ({models}) {
 	return {
 		getAllHeroes: async function(callback) {
-            console.log("all")
             try {
                 const result = await heroesTalents.loadHeroJSONFiles()
 
                 let heroes = []
-                console.log("hello")
 
                 Object.entries(result).forEach(([key, eachHero]) => {
-                    console.log(`${key}: ${eachHero}`)
 
-                    console.log(eachHero)
                     let hero = {
                         id: eachHero.id,
                         shortName: eachHero.shortName,
@@ -42,7 +38,6 @@ module.exports = function ({models}) {
         },
  
         getHeroByName: async function(hero_name, callback) {
-            console.log(hero_name)
             try {
                 const heroes = await heroesTalents.loadHeroJSONFiles()
                 const selectedHero = heroes[hero_name]

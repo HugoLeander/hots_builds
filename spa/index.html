@@ -16,11 +16,13 @@
     </header>
 
     <nav>
-        <ul>
-            <li><a href="/">Start</a></li>
+        <ul id="nav-ul">
+            <!-- <li><a href="/">Start</a></li>
             <li><a href="/accounts">Accounts</a></li>
             <li><a href="/login">Login</a></li>
-            <li><a href="/gibberish">Gibberish</a></li>
+            <li><a href="/createReview">CreateReview</a></li>
+            <li><a href="/reviews/1">TestReviews</a></li>
+            <li><a href="/review/1">TestReview</a></li> -->
         </ul>
     </nav>
 
@@ -29,11 +31,6 @@
         <div class="page" id="start-page">
             <h1>Start page</h1>
             <p>This is the start-page</p>
-        </div>
-
-        <div class="page" id="about-page">
-            <h1>about page</h1>
-            <p>This is the about-page</p>
         </div>
 
         <div class="page" id="accounts-page">
@@ -79,9 +76,9 @@
             </form>
         </div>
 
-        <div class="page" id="update-page">
+        <div class="page" id="update-account-page">
             <h1>Update Account</h1>
-            <form action="/rest/:id" method="PUT" id="updateForm">
+            <form action="/rest/:id" method="PUT" id="updateAccountForm">
                 <div class="padding">
                     <input type="text" name="update-username" id="update_username" placeholder="New Username">
                 </div>
@@ -98,15 +95,93 @@
             </form>
         </div>
 
-        <div class="page" id="delete-page">
+        <div class="page" id="delete-account-page">
             <h1>Delete account?</h1>
             <h3>Are you really sure you want to delete this account?</h3>
-            <form action="/rest/:id" method="DELETE" id="deleteForm">
+            <form action="/rest/:id" method="DELETE" id="deleteAccountForm">
                 <div>
                     <input type="submit" value="Yes" id="yes_button">
                 </div>
                 <div>
                     <input type="submit" value="No" id="no_button">
+                </div>
+            </form>
+        </div>
+
+        <div class="page" id="create-review-page">
+            <h1>Create review</h1>
+            <form action="" id="createReviewForm">
+                <input type="text" placeholder="Hero name" name="hero_name" id="review_hero_name" required>
+                <input type="text" placeholder="Name" name="name" id="review_name" required>
+                <div>
+                    <select name="rating" id="review_rating" required>
+                        <option value= 1 > 1 </option>
+                        <option value= 2 > 2 </option>
+                        <option value= 3 selected> 3 </option>
+                        <option value= 4 > 4 </option>
+                        <option value= 5 > 5 </option>
+                    </select>
+                </div>
+                <div>
+                    <h4>Description: </h4>
+                    <textarea name="description" rows="5" cols="30" id="review_description" required></textarea>
+                </div>
+                <div class="padding">
+                    <input type="submit" role="button" value="Create review">
+                </div>
+            </form>
+        </div>
+
+        <div class="page" id="your-reviews-page">
+            <h1>Your reviews</h1>
+            <ul id="your-reviews">
+
+            </ul>
+        </div>
+
+        <div class="page" id="review-page">
+            <h1>Review</h1>
+            <div>Hero: <span id="review-hero-name"></span></div>
+            <div>Name: <span id="review-name"></span></div>
+            <div>Rating: <span id="review-rating"></span></div>
+            <div>Description: <span id="review-description"></span></div>
+            <ul id="crud-links">
+
+            </ul>
+        </div>
+
+        <div class="page" id="update-review-page">
+            <h1>Update review</h1>
+            <form action="/rest/review/:id" method="PUT" id="updateReviewForm">
+                <input type="text" placeholder="New name" name="update_name" id="review_update_name" required>
+                <div>
+                    <select name="rating" id="review_update_rating" required>
+                        <option value= 1 > 1 </option>
+                        <option value= 2 > 2 </option>
+                        <option value= 3 selected> 3 </option>
+                        <option value= 4 > 4 </option>
+                        <option value= 5 > 5 </option>
+                    </select>
+                </div>
+                <div>
+                    <h4>Description: </h4>
+                    <textarea name="update_description" rows="5" cols="30" id="review_update_description" required></textarea>
+                </div>
+                <div class="padding">
+                    <input type="submit" role="button" value="Update review">
+                </div>
+            </form>
+        </div>
+
+        <div class="page" id="delete-review-page">
+            <h1>Delete review?</h1>
+            <h3>Are you really sure you want to delete this review?</h3>
+            <form action="/rest/review/:id" method="DELETE" id="deleteReviewForm">
+                <div>
+                    <input type="submit" value="Yes" id="delete_review_yes_button">
+                </div>
+                <div>
+                    <input type="submit" value="No" id="delete_review_no_button">
                 </div>
             </form>
         </div>
