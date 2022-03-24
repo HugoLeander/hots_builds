@@ -108,14 +108,24 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
             } 
         })
     })
+    
 
     router.get('/build/:hero_name', async function(request, response){
 
-        heroManager.getBuildsByHeroName(name, function(errors, hero){
+        const name = request.params.hero_name
+
+        heroManager.getBuildsByHeroName(name, function(errors, foundBuilds){
             if(errors.length > 0) {
                 response.status(400).json(errors)
             } else {
-                response.status(200).json(hero)
+                //returns the talents of the first build of a hero
+                const build = []
+
+                for(const talent of foundBuilds[0].talents) {
+                    build.push(talent)
+                }
+
+                response.status(200).json(build)
             }
         })
     })
