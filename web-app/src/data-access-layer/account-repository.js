@@ -1,11 +1,6 @@
-module.exports = function({db}){
+module.exports = function ({ db }) {
 	return {
-		/*
-		Retrieves all accounts ordered by username.
-		Possible errors: databaseError
-		Success value: The fetched accounts in an array.
-		*/
-		getAllAccounts: function (callback) { // den finns
+		getAllAccounts: function (callback) {
 
 			const query = `SELECT * FROM accounts ORDER BY account_id`
 			const values = []
@@ -18,12 +13,8 @@ module.exports = function({db}){
 				}
 			})
 		},
-		
-		/*
-		Retrieves the account with the given username.
-		Possible errors: databaseError
-		Success value: The fetched account, or null if no account has that username.
-		*/
+
+
 		getAccountById: function (user, callback) {
 
 			const query = `SELECT * FROM accounts WHERE account_id = ?`
@@ -38,11 +29,11 @@ module.exports = function({db}){
 			})
 		},
 
-		getAccountByUsername: function (username, callback) { // den finns
+		getAccountByUsername: function (username, callback) {
 
 			const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
 			const values = [username]
-		
+
 			db.dbConnection.query(query, values, function (error, accounts) {
 				if (error) {
 					callback(error, null)
@@ -52,12 +43,12 @@ module.exports = function({db}){
 			})
 		},
 
-		deleteAccountById: function(id, callback) {
+		deleteAccountById: function (id, callback) {
 			const query = `DELETE FROM accounts WHERE account_id = ? LIMIT 1`
 			const values = id
-			
-			db.dbConnection.query(query, values, function(error, account) {
-				if(error) {
+
+			db.dbConnection.query(query, values, function (error, account) {
+				if (error) {
 					callback(error, null)
 				} else {
 					callback([], account)
@@ -70,7 +61,7 @@ module.exports = function({db}){
 
 			const query = `INSERT INTO accounts (username, password) VALUES (?, ?)`
 			const values = [newUser.username, newUser.password]
-		
+
 			db.dbConnection.query(query, values, function (error, newUser) {
 				if (error) {
 					// TODO: Look for usernameUnique violation.
@@ -81,17 +72,17 @@ module.exports = function({db}){
 			})
 		},
 
-		updateAccountInformation: function(newInfo, callback) {
-			
+		updateAccountInformation: function (newInfo, callback) {
+
 			const query = `UPDATE accounts SET username = ?, password = ? WHERE account_id = ?`
 			const values = [newInfo.username, newInfo.password, newInfo.account_id]
 			console.log(values)
-			db.dbConnection.query(query, values, function(error, newInfo) {
-				if(error) {
-					console.log("error i databasen")
+			db.dbConnection.query(query, values, function (error, newInfo) {
+				if (error) {
+					console.log("Database error")
 					callback(['databaseError'], null)
 				} else {
-					console.log("Uppdaterade!")
+					console.log("Updated!")
 					callback([], newInfo)
 				}
 			})
