@@ -9,7 +9,6 @@ module.exports = function({accountRepository}) {
 		getErrorsNewAccount: function(newUser, callback){
 			const errors = []
 			console.log(newUser)
-			// Validate username.
 			if(!newUser.hasOwnProperty("username")){
 				errors.push("username is Missing")
 			}

@@ -52,7 +52,7 @@ module.exports = function({reviewManager, heroManager, buildManager}) {
         
         const name = request.params.hero_name
         console.log("logged in user id is:")
-        console.log(request.session.id)
+        console.log(request.session.user_id)
 
         const newReview = {
             hero_name: name,
