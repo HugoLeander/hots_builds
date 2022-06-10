@@ -28,24 +28,24 @@ module.exports = function () {
                 callback(['heroDatabaseError'], null)
             }
         },
- 
-        getHeroByName: async function(hero_name, callback) {
+
+        getHeroByName: async function (hero_name, callback) {
             try {
                 const heroes = await heroesTalents.loadHeroJSONFiles()
                 const selectedHero = heroes[hero_name]
                 const hero = {
-                        id: selectedHero.id,
-                        shortName: selectedHero.shortName,
-                        name: selectedHero.name,
-                        icon: selectedHero.icon,
-                        role: selectedHero.role,
-                        expandedRole: selectedHero.expandedRole,
-                        type: selectedHero.type
+                    id: selectedHero.id,
+                    shortName: selectedHero.shortName,
+                    name: selectedHero.name,
+                    icon: selectedHero.icon,
+                    role: selectedHero.role,
+                    expandedRole: selectedHero.expandedRole,
+                    type: selectedHero.type
                 }
                 callback([], hero)
             } catch {
                 callback(['heroDatabaseError'], null)
             }
         }
-	}
+    }
 }

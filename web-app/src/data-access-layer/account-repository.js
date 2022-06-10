@@ -1,4 +1,4 @@
-module.exports = function({db}){
+module.exports = function ({ db }) {
 	return {
 		/*
 		Returns all accounts as an array of account objects
@@ -35,7 +35,7 @@ module.exports = function({db}){
 
 			const query = `SELECT * FROM accounts WHERE username = ? LIMIT 1`
 			const values = [username]
-		
+
 			db.dbConnection.query(query, values, function (error, accounts) {
 				if (error) {
 					callback(error, null)
@@ -84,7 +84,7 @@ module.exports = function({db}){
 				if(error) {
 					callback(['databaseError'], null)
 				} else {
-					console.log("Uppdaterade!")
+					console.log("Updated!")
 					callback([], newInfo)
 				}
 			})

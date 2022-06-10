@@ -14,16 +14,13 @@ module.exports = function({accountRepository}) {
 				errors.push("username is Missing")
 			}
 			if(newUser.username.length < MIN_USERNAME_LENGTH){
-				errors.push("username is Too Short, min length is 3 characters")
-				console.log("error min length")
+				errors.push("username needs to be minimum 3 characters")
 			}
 			else if(MAX_USERNAME_LENGTH < newUser.username.length){    
-				errors.push("username is Too Long, max length is 10 characters") 
-				console.log("error max length")
+				errors.push("username needs to be less than 10 characters") 	
 			}
 			if(newUser.password != newUser.confirm_password){
 				errors.push("Passwords don't match")
-				console.log("passwords dont match")
 			}
 			if(errors.length > 0) {
 				callback(errors, newUser)
