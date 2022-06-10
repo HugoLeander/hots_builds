@@ -32,7 +32,7 @@ module.exports = function({reviewRepository, reviewValidator}) {
 				if(error) {
 					callback(error, null, false)
 				} else {
-					if(request.session.id == review.authorId || request.body.userInfo.is_admin) {
+					if(request.session.user_id == review.authorId || request.body.userInfo.is_admin) {
 						reviewValidator.getErrorsNewInfo(newInfo, function(errors) {
 							if(errors.length > 0) {
 
