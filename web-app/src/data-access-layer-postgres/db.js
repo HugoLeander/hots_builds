@@ -2,14 +2,14 @@ const Sequelize = require('sequelize');
 
 module.exports = function({}) {
     const sequelizeInstance = new Sequelize(
-        "postgres",
-        "postgres",
-        "postgres",
-        {
-          host: "postgresql",
-          dialect: 'postgres',
-        },
-      )
+      "root",
+      "root",
+      "abc123",
+      {
+        host: "postgresql",
+        dialect: 'postgres'
+      }
+    )
     sequelizeInstance.authenticate().then( () => {
       console.log("connected to postgress")
     })

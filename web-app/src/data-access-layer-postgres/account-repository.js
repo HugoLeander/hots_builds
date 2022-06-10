@@ -2,11 +2,6 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 module.exports = function ({models }) {
 	return {
-		/*
-		Retrieves all accounts ordered by username.
-		Possible errors: databaseError
-		Success value: The fetched accounts in an array.
-		*/
 		getAllAccounts: async function (callback) {
 			try {
 				const result = await models.account.findAll()
@@ -22,12 +17,6 @@ module.exports = function ({models }) {
 				callback(['databaseError'], null)
 			}
 		},
-
-		/*
-		Retrieves the account with the given username.
-		Possible errors: databaseError
-		Success value: The fetched account, or null if no account has that username.
-		*/
 		getAccountByUsername: async function (username, callback) {
 			try {
 				const result = await models.account.findAll({
@@ -44,12 +33,12 @@ module.exports = function ({models }) {
 			}
 		},
 
-		getAccountById: async function (user, callback) {
+		getAccountById: async function (id, callback) {
 			
 			try {
 				const result = await models.account.findAll({
 					where: {
-						account_id: user.account_id
+						id: id
 					},
 					limit: 1
 				});
@@ -69,22 +58,20 @@ module.exports = function ({models }) {
 				})
 				callback([], newUser)
 			} catch (error) {
-				// TODO: Look for usernameUnique violation.
 				callback(error, null)
 			}
 		},
 
 		deleteAccountById: async function(id, callback) {
- 
 			try {
 				await models.account.destroy({
 					where: {
-						account_id :id
+						id :id
 					}
 				})
-				callback([])
+				callback(null)
 			} catch (error) {
-				callback(['databaseError'], null)
+				callback(['databaseError'])
 			}
 		},
 
@@ -95,7 +82,7 @@ module.exports = function ({models }) {
 					username: newInfo.username,
 					password: newInfo.password}, {
 					where: {
-					account_id: newInfo.account_id
+					id: newInfo.id
 					}
 				})
 

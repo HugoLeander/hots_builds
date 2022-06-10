@@ -13,6 +13,7 @@ if(usePostgres) {
     container.register("reviewRepository", awilix.asFunction(require('../data-access-layer-postgres/review-repository')))
     container.register("models", awilix.asFunction(require("../data-access-layer-postgres/models")))
     container.register("heroRepository", awilix.asFunction(require('../data-access-layer-postgres/hero-repository')))
+    container.register("buildRepository", awilix.asFunction(require('../data-access-layer-postgres/build-repository')))
 } else {
     //data-access-layer
     console.log("mySQL is used")
@@ -20,6 +21,7 @@ if(usePostgres) {
     container.register("db", awilix.asFunction(require('../data-access-layer/db')))
     container.register("reviewRepository", awilix.asFunction(require('../data-access-layer/review-repository')))
     container.register("heroRepository", awilix.asFunction(require('../data-access-layer/hero-repository')))
+    container.register("buildRepository", awilix.asFunction(require('../data-access-layer/build-repository')))
 }
 
 //business-logic-layer
@@ -28,6 +30,7 @@ container.register("accountValidator", awilix.asFunction(require('../business-lo
 container.register("reviewManager", awilix.asFunction(require('../business-logic-layer/review-manager')))
 container.register("reviewValidator", awilix.asFunction(require('../business-logic-layer/review-validator')))
 container.register("heroManager", awilix.asFunction(require('../business-logic-layer/hero-manager')))
+container.register("buildManager", awilix.asFunction(require('../business-logic-layer/build-manager')))
 container.register("encryptionManager", awilix.asFunction(require('../business-logic-layer/encryption-manager')))
 
 //presentation-layer

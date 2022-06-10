@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = function({db}) {
     return {
         account: db.dbConnection.define('account', {
-            account_id: {
+            id: {
               type: Sequelize.INTEGER,
               autoIncrement: true,
               allowNull: false,
@@ -27,7 +27,7 @@ module.exports = function({db}) {
             timestamps: false
           }),
         review: db.dbConnection.define('review', {
-            review_id: {
+            id: {
               type: Sequelize.INTEGER,
               autoIncrement: true,
               allowNull: false,
@@ -58,13 +58,13 @@ module.exports = function({db}) {
             timestamps: false
           }),
         build: db.dbConnection.define('build', {
-          build_id: {
+          id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             allowNull: false,
             primaryKey: true,
           },
-          build_name: {
+          name: {
             type: Sequelize.STRING,
             allowNull: false,
           },
@@ -76,31 +76,31 @@ module.exports = function({db}) {
               type: Sequelize.INTEGER,
               allowNull: false,
           },
-          talentTreeId_level_1: {
+          level_1_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           },
-          talentTreeId_level_4: {
+          level_4_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           },
-          talentTreeId_level_7: {
+          level_7_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           },
-          talentTreeId_level_10: {
+          level_10_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           },
-          talentTreeId_level_13: {
+          level_13_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           },
-          talentTreeId_level_16: {
+          level_16_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           },
-          talentTreeId_level_20: {
+          level_20_talentTreeId: {
               type: Sequelize.STRING,
               allowNull: false,
           }

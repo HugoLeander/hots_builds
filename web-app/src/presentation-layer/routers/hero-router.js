@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function({reviewManager, heroManager}) {
+module.exports = function({reviewManager, heroManager, buildManager}) {
     const router = express.Router()
     
     router.use(express.urlencoded({ extended: false}))
@@ -10,7 +10,7 @@ module.exports = function({reviewManager, heroManager}) {
         const name = request.params.hero_name
 
         heroManager.getHeroByName(name, function(hero_errors, hero){
-            heroManager.getBuildsByHeroName(name, function(build_errors, builds){
+            buildManager.getBuildsByHeroName(name, function(build_errors, builds){
                 reviewManager.getAllReviewsByName(name, function(review_errors, reviews) {
                     const errors = hero_errors
                     errors.push(review_errors)
@@ -35,8 +35,6 @@ module.exports = function({reviewManager, heroManager}) {
     })
 
     router.get('/:hero_name/review', function(request, response){
-        //TODO add validation so that the hero exists
-        //TODO add errors
 
         const name = request.params.hero_name
 
@@ -47,27 +45,32 @@ module.exports = function({reviewManager, heroManager}) {
     })
 
     router.post("/:hero_name/review", function(request, response){
-        
-        //TODO add validation so that the hero exists
-        //TODO fix how we use the name of the hero when creating reviews
 
+        if(!request.session.isLoggedIn) {
+            response.redirect("/hero/" + name)
+        }
+        
         const name = request.params.hero_name
-        console.log(request)
+        console.log("logged in user id is:")
+        console.log(request.session.id)
 
         const newReview = {
             hero_name: name,
             name: request.body.name,
             rating: request.body.rating,
             description: request.body.description,
-            author_account_id: request.session.account_id
+            author_account_id: request.session.user_id
         };
         
-        reviewManager.createReview(newReview, function(errors, review){
-            
+        reviewManager.createReview(request, newReview, function(errors, review, authorized){
             const model = {
                 errors: errors
             }
-            if(errors.lenght > 0){
+            if(!authorized) {
+                console.log("Unauthorized")
+                response.redirect("/sign-in")
+            }
+            else if(errors.lenght > 0){
                 console.log(errors)
                 response.render('create-review.hbs', model)
             } else {

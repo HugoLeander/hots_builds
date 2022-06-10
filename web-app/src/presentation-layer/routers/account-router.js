@@ -33,7 +33,11 @@ router.post("/sign-in", function(request, response){
 			console.log("could not login")
 		} else {
 			request.session.isLoggedIn = true
-			request.session.account_id = loggedInUser.account_id
+			console.log("logged in user is:")
+			console.log(loggedInUser)
+			console.log("logged in user id is:")
+			console.log(loggedInUser.id)
+			request.session.user_id = loggedInUser.id
 			response.redirect('/')
 			console.log("Successfull login")
 		}

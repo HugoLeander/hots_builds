@@ -45,7 +45,6 @@ module.exports = function({models}) {
                 })
                 callback([], review)
 			} catch (error) {
-				// TODO: Look for usernameUnique violation.
                 console.log("error", error)
                 callback(['databaseError'], null)
 			}

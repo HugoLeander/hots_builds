@@ -7,7 +7,7 @@ module.exports = function({}) {
             port: 3306,
             user: "root",
             password: "abc123",
-            database: "my-platform"
+            database: "hots_builds_database"
         })
     }
 }

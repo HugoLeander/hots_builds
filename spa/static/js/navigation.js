@@ -141,7 +141,7 @@ function showPage(url) {
 					const update_password = document.getElementById("update_password").value
 					const update_confirm_password = document.getElementById("confirm_update_password").value
 					const updatedAccount = {
-						account_id: id,
+						id: id,
 						username: update_username,
 						password: update_password,
 						confirm_password: update_confirm_password
@@ -257,7 +257,7 @@ async function loadAccountsPage() {
 		const anchor = document.createElement('a')
 		anchor.innerText = human.username
 
-		anchor.setAttribute('href', "/accounts/" + human.account_id)
+		anchor.setAttribute('href', "/accounts/" + human.id)
 		anchor.addEventListener('click', function (event) {
 			event.preventDefault()
 
@@ -347,7 +347,7 @@ async function loadAccountPage(id) {
 	UlArr.appendChild(updateLi)
 	UlArr.appendChild(deleteLi)
 
-	document.getElementById('account-id').innerText = account.account_id
+	document.getElementById('account-id').innerText = account.id
 	document.getElementById('account-username').innerText = account.username
 	//document.getElementById('account-password').innerText = account.password
 
@@ -473,7 +473,7 @@ async function login(username, password) {
 			const responseBody = await response.json()
 
 			ACCESS_TOKEN = responseBody.access_token
-			ACCOUNT_ID = responseBody.account_id
+			ACCOUNT_ID = responseBody.id
 			IS_ADMIN = responseBody.is_admin 
 			IS_LOGGED_IN = true
 
@@ -602,7 +602,7 @@ async function createAccount(account) {
 }
 
 async function updateAccount(account) {
-	const response = await fetch(restAPI + account.account_id, {
+	const response = await fetch(restAPI + account.id, {
 		method: "PUT",
 		headers: {
 			"Content-type": "application/json",
@@ -621,7 +621,7 @@ async function updateAccount(account) {
 			//const account = await response.json()
 			console.log(account)
 			hideCurrentPage()
-			showPage('/accounts/' + account.account_id)
+			showPage('/accounts/' + account.id)
 			break
 
 		case 401:

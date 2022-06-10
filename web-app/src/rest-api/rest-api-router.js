@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 
 const secretKey = 'kattunge' // måste vara samma secret key för encrypt och decrypt därav en constant 
 
-module.exports = function ({ accountManager, heroManager, reviewManager}) {
+module.exports = function ({ accountManager, heroManager, reviewManager, buildManager}) {
 
     //verifyToken middleware function
     function verifyToken(request, response, next) {
@@ -114,7 +114,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
         const name = request.params.hero_name
 
-        heroManager.getBuildsByHeroName(name, function(errors, foundBuilds){
+        buildManager.getBuildsByHeroName(name, function(errors, foundBuilds){
             if(errors.length > 0) {
                 response.status(400).json(errors)
             } else {
@@ -131,32 +131,30 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
     })
 
     router.post('/createBuild', verifyToken, async function(request, response){
-
-        if (request.body.userInfo.is_admin) {
-            const newBuild = {
-                hero_name: request.body.hero_name,
-                talents: request.body.talents,
-                build_name: request.body.build_name,
-                build_description: request.body.build_description
-            }
-    
-            heroManager.createBuild(newBuild, async function(errors, build){
-                if(errors.length > 0) {
-                    response.status(400).json(errors)
-                } else {
-                    response.status(200).json(build)
-                }
-            })
-        } else {
-            response.sendStatus(403)
+        const newBuild = {
+            hero_name: request.body.hero_name,
+            talents: request.body.talents,
+            build_name: request.body.build_name,
+            build_description: request.body.build_description
         }
+
+        buildManager.createBuild(newBuild, async function(errors, build, authorized){
+            if(!authorized) {
+                response.sendStatus(403)
+            }
+            else if(errors.length > 0) {
+                response.status(400).json(errors)
+            } else {
+                response.status(200).json(build)
+            }
+        })
     })
 
     router.put("/:id", verifyToken, function (request, response) {
 
-        if (request.body.userInfo.account_id == request.params.id || request.body.userInfo.is_admin) {
+        if (request.body.userInfo.id == request.params.id || request.body.userInfo.is_admin) {
             const newInfo = {
-                account_id: request.params.id,
+                id: request.params.id,
                 username: request.body.username,
                 password: request.body.password,
                 confirm_password: request.body.confirm_password
@@ -191,7 +189,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
             accountManager.loginAccount(user, function(error, userGotBack) {
                 if(userGotBack) {   
                         const payload = {
-                            account_id: userGotBack.account_id,
+                            id: userGotBack.id,
                             username: userGotBack.username,
                             is_admin: userGotBack.is_admin, 
                             is_logged_in: true
@@ -204,7 +202,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                             } else {
                                 response.status(200).json({
                                     "access_token": token,
-                                    account_id: userGotBack.account_id,
+                                    id: userGotBack.id,
                                     is_admin: userGotBack.is_admin
                                 }) 
                             }
@@ -220,17 +218,17 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
         }
     })
 
-    router.get("/:id", verifyToken, function (request, response) { // verifyToken funktionen används som middleware
+    router.get("/:id", verifyToken, function (request, response) { 
 
-        const account_id = request.params.id
+        const id = request.params.id
 
-        if (request.body.userInfo.account_id == account_id || request.body.userInfo.is_admin) {
+        if (request.body.userInfo.id == id || request.body.userInfo.is_admin) {
 
             accountManager.getAllAccounts(function (errors, accounts) {
                 if (errors.length > 0) {
                     response.status(400).json(errors)
                 } else {
-                    const account = accounts.find(a => a.account_id == account_id)
+                    const account = accounts.find(a => a.id == id)
 
                     if (account) {
                         response.status(200).json(account)
@@ -246,19 +244,18 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
     router.delete("/:id", verifyToken, function (request, response) {
 
-        const account_id = request.params.id
+        const id = request.params.id
 
-        if (request.body.userInfo.account_id == account_id || request.body.userInfo.is_admin) {
-            accountManager.deleteAccountById(account_id, function(errors){
-                if(errors > 0){
-                    response.status(400).json(errors)
-                } else {
-                    response.status(204).end() // om det tas bort
-                }
-            })
-        } else {
-            response.sendStatus(403)
-        }
+        accountManager.deleteAccountById(request, id, function(errors, authorized){
+            if (!authorized) {
+                response.sendStatus(403)
+            }
+            else if(errors > 0){
+                response.status(400).json(errors)
+            } else {
+                response.status(204).end()
+            }
+        })
     })
     
     router.post("/review", verifyToken, function(request, response) {
@@ -271,9 +268,11 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
             author_account_id: request.body.userInfo.account_id
         }
 
-        reviewManager.createReview(newReview, function(errors, review) {
-           
-            if(errors.length > 0) {
+        reviewManager.createReview(newReview, function(errors, review, authorized) {
+            if (!authorized) {
+                response.sendStatus(403)
+            }
+            else if(errors.length > 0) {
                 console.log(errors)
                 response.status(400).json(errors)
             } else {
@@ -310,34 +309,19 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
             description: request.body.description
         }
 
-        reviewManager.getReviewById(request.params.id, function(reviewErrors, review) {
-            if (!review) {
+        reviewManager.updateReview(request, newInfo, function(errors, review, authorized){
+            if(!review){
                 response.status(404).end()
+            } else if (!authorized){
+                response.sendStatus(403)
+            } else if(errors.length > 0) {
+                response.status(400).json(errors)
             } else {
-                if (reviewErrors.length > 0) {
-                    response.status(400).json(reviewErrors)
-                } else {
-                    if (review.author_account_id == request.body.userInfo.account_id || request.body.userInfo.is_admin) {
-                        reviewManager.updateReview(newInfo, function(errors, review) {
-                            if (!review) {
-                                response.status(404).end()
-                            } else {
-                                if (errors.length > 0) {
-                                    response.status(400).json(errors)
-                                } else {
-                                    response.status(204).end()
-                                }
-                            }
-                        })
-                    } else{
-                        response.sendStatus(403)
-                    } 
-                }
-            } 
-        })   
+                response.status(204).end() 
+            }
+        })
     })
     
-
     router.delete("/review/:id", verifyToken, function(request, response) {
 
         const review_id = request.params.id
@@ -348,7 +332,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
                 if (errors.length > 0) {
                     response.status(400).json(errors)
                 } else {
-                    if (request.body.userInfo.account_id == review_id || request.body.userInfo.is_admin) {
+                    if (request.body.userInfo.id == review_id || request.body.userInfo.is_admin) {
                         reviewManager.deleteReviewById(review_id, function(errors) {
                             if(errors.length > 0){
                                 response.status(400).json(errors)
@@ -366,9 +350,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager}) {
 
     router.get("/reviews/:id", function(request, response) {
         console.log("test")
-        const account_id = request.params.id
+        const id = request.params.id
 
-        reviewManager.getAllReviewsByAuthorId(account_id, function(error, reviews) {
+        reviewManager.getAllReviewsByAuthorId(id, function(error, reviews) {
             if (error.length > 0) {
                 response.status(400).json(error)
             } else {

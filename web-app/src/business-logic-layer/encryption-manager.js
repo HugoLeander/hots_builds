@@ -7,18 +7,18 @@ module.exports = function({}){
 		encryptPassword: function(password, callback) {
             bcrypt.hash(password, saltrounds, function(error, hash){
                 if(error) {
-                    //TODO something
+                    callback(error, null)
                 }else{
-                    callback(hash)
+                    callback(null, hash)
                 }
             })
 		},
         validateEncryptedPassword: function(password, storedpassword, callback) {
             bcrypt.compare(password, storedpassword, function(error, result) {
                 if (error) {
-                    //TODO something
+                    callback(['Wrong password'], null)
                 } else {
-                    callback(result)
+                    callback(null, result)
                 }
             });
         }

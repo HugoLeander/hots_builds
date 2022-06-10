@@ -18,29 +18,33 @@ module.exports = function({reviewRepository}) {
 				errors.push("heroes name is Missing")
 			}
 			if(newReview.name.length < MIN_NAME_LENGTH){
-				errors.push("name is Too Short")
+				errors.push("name is Too Short, min is 3 characters")
 				console.log("error min length")
 			}
-			if(MAX_NAME_LENGTH < newReview.name.length){
-				errors.push("name is Too Long")
+			else if(MAX_NAME_LENGTH < newReview.name.length){
+				errors.push("name is Too Long, max is 20 characters")
 				console.log("error max length")
 			}
-			reviewRepository.createReview(newReview, function(error, newReview){
+
+			if(errors.length > 0) {
+				callback(errors, null)
+			} else {
+				reviewRepository.createReview(newReview, function(error, newReview){
 		
-				if(errors.length > 0){
-					console.log(errors)
-					console.log("crashar i validator")
-				}
-				else {
-					console.log("skickade till repository")
-					callback(errors, newReview)
-				}
-			})
+					if(error){
+						console.log(error)
+						callback(error, null)
+					}
+					else {
+						console.log("skickade till repository")
+						callback([], newReview)
+					}
+				})
+			}
+			
 		},
 		getErrorsNewInfo: function(newInfo, callback){
 			const errors = []
-			//console.log(newInfo)
-			// Validate username.
 			if(!newInfo.hasOwnProperty("name")){
 				errors.push("name is Missing")
 			}
@@ -48,26 +52,16 @@ module.exports = function({reviewRepository}) {
 				errors.push("heroes name is Missing")
 			}
 			if(newInfo.name.length < MIN_NAME_LENGTH){
-				errors.push("name is Too Short")
+				errors.push("name is Too Short, min is 3 characters")
 				console.log("error min length")
 			}
-			if(MAX_NAME_LENGTH < newInfo.name.length){
-				errors.push("name is Too Long")
+			else if(MAX_NAME_LENGTH < newInfo.name.length){
+				errors.push("name is Too Long, max is 20 characters")
 				console.log("error max length")
 			}
-			if(errors.length > 0) {
-				console.log(errors)
-			} else {
-				accountRepository.updateReview(newInfo, function(error, newInfo){ 
-					if(error){
-						console.log(error)
-						callback(error, null)
-					} else {
-						console.log("skickade till repo")
-						callback(error, newInfo)
-					}
-				})
-			}
+			
+			console.log(errors)
+			callback(errors)
 		}
 	}
 }

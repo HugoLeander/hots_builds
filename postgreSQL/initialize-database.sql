@@ -1,35 +1,35 @@
 -- Create a table to store user accounts in.
 CREATE TABLE IF NOT EXISTS "accounts" (
-	account_id SERIAL,
+	id SERIAL,
 	username VARCHAR(50) NOT NULL UNIQUE,
 	password VARCHAR(100) NOT NULL,
 	is_admin BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY (account_id) 
+	PRIMARY KEY (id) 
 );
 
 CREATE TABLE IF NOT EXISTS "reviews" (
-	review_id SERIAL,
+	id SERIAL,
 	hero_name VARCHAR(30) NOT NULL,
 	name VARCHAR(30) NOT NULL,
 	rating INT NOT NULL,
 	description TEXT NOT NULL,
-	author_account_id INT NOT NULL references accounts(account_id) ON DELETE CASCADE,
-	PRIMARY KEY (review_id)
+	author_account_id INT NOT NULL references accounts(id) ON DELETE CASCADE,
+	PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS "builds" (
-	build_id SERIAL,
-	build_name VARCHAR(30) NOT NULL,
+	id SERIAL,
+	name VARCHAR(30) NOT NULL,
 	description TEXT,
 	hero_id INT NOT NULL,
-	"talentTreeId_level_1" VARCHAR(100) NOT NULL,
-	"talentTreeId_level_4" VARCHAR(100) NOT NULL,
-	"talentTreeId_level_7" VARCHAR(100) NOT NULL,
-	"talentTreeId_level_10" VARCHAR(100) NOT NULL,
-	"talentTreeId_level_13" VARCHAR(100) NOT NULL,
-	"talentTreeId_level_16" VARCHAR(100) NOT NULL,
-	"talentTreeId_level_20" VARCHAR(100) NOT NULL,
-	PRIMARY KEY (build_id)
+	"level_1_talentTreeId" VARCHAR(100) NOT NULL,
+	"level_4_talentTreeId" VARCHAR(100) NOT NULL,
+	"level_7_talentTreeId" VARCHAR(100) NOT NULL,
+	"level_10_talentTreeId" VARCHAR(100) NOT NULL,
+	"level_13_talentTreeId" VARCHAR(100) NOT NULL,
+	"level_16_talentTreeId" VARCHAR(100) NOT NULL,
+	"level_20_talentTreeId" VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id)
 );
 
 INSERT INTO accounts (username, password, is_admin) 

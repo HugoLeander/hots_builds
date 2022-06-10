@@ -14,11 +14,11 @@ module.exports = function({accountRepository}) {
 				errors.push("username is Missing")
 			}
 			if(newUser.username.length < MIN_USERNAME_LENGTH){
-				errors.push("username is Too Short")
+				errors.push("username is Too Short, min length is 3 characters")
 				console.log("error min length")
 			}
-			if(MAX_USERNAME_LENGTH < newUser.username.length){    
-				errors.push("username is Too Long") 
+			else if(MAX_USERNAME_LENGTH < newUser.username.length){    
+				errors.push("username is Too Long, max length is 10 characters") 
 				console.log("error max length")
 			}
 			if(newUser.password != newUser.confirm_password){
@@ -34,17 +34,15 @@ module.exports = function({accountRepository}) {
 
 		getErrorsNewInfo: function(newInfo, callback){
 			const errors = []
-			//console.log(newInfo)
-			// Validate username.
 			if(!newInfo.hasOwnProperty("username")){ 
 				errors.push("username is Missing")
 			}
 			if(newInfo.username.length < MIN_USERNAME_LENGTH){
-				errors.push("username is Too Short")
+				errors.push("username is Too Short, min length is 3 characters")
 				console.log("error min length")
 			}
-			if(MAX_USERNAME_LENGTH < newInfo.username.length){
-				errors.push("username is Too Long")
+			else if(MAX_USERNAME_LENGTH < newInfo.username.length){
+				errors.push("username is Too Long, max length is 10 characters")
 				console.log("error max length")
 			}
 			if(newInfo.password != newInfo.confirm_password){
