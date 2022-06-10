@@ -131,6 +131,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
     })
 
     router.post('/createBuild', verifyToken, async function(request, response){
+        console.log(request.body)
         const newBuild = {
             hero_name: request.body.hero_name,
             talents: request.body.talents,
@@ -138,7 +139,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
             build_description: request.body.build_description
         }
 
-        buildManager.createBuild(newBuild, async function(errors, build, authorized){
+        buildManager.createBuild(request, newBuild, async function(errors, build, authorized){
             if(!authorized) {
                 response.sendStatus(403)
             }

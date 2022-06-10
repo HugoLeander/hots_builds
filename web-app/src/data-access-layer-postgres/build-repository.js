@@ -5,6 +5,8 @@ const numberOFTalentLevels = 7
 module.exports = function ({models}) {
 	return {
         createBuild: async function(newBuild, callback) {
+            console.log("inside createbuild:")
+            console.log(newBuild)
             
             try {
                 const heroes = await heroesTalents.loadHeroJSONFiles()
@@ -16,7 +18,7 @@ module.exports = function ({models}) {
                 }
 
 				const build = await models.build.create({
-					build_name: newBuild.build_name,
+					name: newBuild.build_name,
                     description: newBuild.build_description,
                     hero_id: heroId,
                     "level_1_talentTreeId": heroTalents["1"].find(element => element.sort == newBuild.talents[0]).talentTreeId,

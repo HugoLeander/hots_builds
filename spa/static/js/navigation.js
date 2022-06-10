@@ -243,7 +243,6 @@ async function loadAccountsPage() {
 			"Authorization": "Bearer " + ACCESS_TOKEN
 		}
 	})
-	// TODO: Check status code and act accordingly!
 
 	const humans = await response.json()
 
@@ -349,7 +348,7 @@ async function loadAccountPage(id) {
 
 	document.getElementById('account-id').innerText = account.id
 	document.getElementById('account-username').innerText = account.username
-	//document.getElementById('account-password').innerText = account.password
+	document.getElementById('account-password').innerText = account.password
 
 }
 
@@ -361,7 +360,6 @@ async function loadReviewsPage(authorId) {
 			"Content-type": "application/json",
 		}
 	})
-	// TODO: Check status code and act accordingly!
 
 	const reviews = await response.json()
 
@@ -403,8 +401,6 @@ async function loadReviewPage(id) {
 		}
 	})
 	const review = await response.json()
-
-//TODO everything below needs to be changed
 
 	const crudUl = document.getElementById('crud-links')
 	crudUl.innerText = ""
@@ -484,12 +480,10 @@ async function login(username, password) {
 			break
 
 		case 401:
-			// handle error
 			break
 
 
 		case 400:
-			//handle error
 			break
 	}
 }
@@ -584,19 +578,15 @@ async function createAccount(account) {
 			break
 
 		case 401:
-			//handle error
 			break
 
 		case 400:
-			//handle error
 			break
 
 		case 500:
-			//handle error
 			break
 
 		default:
-			//handle error
 			break
 	}
 }
@@ -617,15 +607,12 @@ async function updateAccount(account) {
 			break
 
 		case 404:
-			// handle errors
-			//const account = await response.json()
 			console.log(account)
 			hideCurrentPage()
 			showPage('/accounts/' + account.id)
 			break
 
 		case 401:
-			// handle errors
 			break
 	}
 }
@@ -641,13 +628,12 @@ async function deleteAccount(id) {
 	})
 
 	switch (response.status) {
-		case 204: // om det togs bort
+		case 204: 
 			hideCurrentPage()
 			showPage('/accounts')
 			break
 
 		case 400:
-			//handle errors
 			break
 	}
 }
@@ -672,19 +658,15 @@ async function createReview(review) {
 			break
 
 		case 401:
-			//handle error
 			break
 
 		case 400:
-			//handle error
 			break
 
 		case 500:
-			//handle error
 			break
 
 		default:
-			//handle error
 			break
 	}
 }
@@ -705,15 +687,8 @@ async function updateReview(review) {
 			break
 
 		case 404:
-			// handle errors
-			//const account = await response.json()
-			// console.log(account)
-			// hideCurrentPage()
-			// showPage('/accounts/' + account.account_id)
-			// break
 
 		case 401:
-			// handle errors
 			break
 	}
 }
@@ -730,14 +705,12 @@ async function deleteReview(id) {
 	})
 
 	switch (response.status) {
-		case 204: // om det togs bort
+		case 204:
 			hideCurrentPage()
-			//show some other page than /
 			showPage('/')
 			break
 
 		case 400:
-			//handle errors
 			break
 	}
 }
