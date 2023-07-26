@@ -3,77 +3,83 @@
 
 {{#if builds.length}}
 
-    {{#each builds}}
-        <div class="heroes_build">
-            <div class="heroes_build_header">
-                <h3 class="toc_no_parsing">{{name}}</h3>
-                {{!-- This needs to be fixed --}}
-                <span class="heroes_build_tag heroes_build_tag_recommended">
-                    <span>Recommended</span>
-                    <span class="heroes_build_tag_image"></span>
-                </span>
-                {{!-- ############################ --}}
-            </div>
-            <div class="heroes_build_talents">
-                {{#each talents}}
-                    <div class="heroes_build_talent_tier">
-                    <span class="heroes_build_talent_tier_subtitle">{{available_at}}</span>
-                    {{!-- This needs to be fixed --}}
-                    <span class="heroes_build_talent_tier_visual">
-                        {{#each talent_tier_visual}}
-                            {{#if isVisible}}
-                                <span class="heroes_build_talent_tier_yes"></span>
-                            {{else}}
-                                <span class="heroes_build_talent_tier_no"></span>
-                            {{/if}}
-                        {{/each}}
-                    </span>
-                    {{!-- ############################ --}}
-                    <div class="tooltip">
-                        <img src={{icon}} alt={{name}}>
-                        <p>{{name}}</p>
-                        <span class="tooltiptext">{{description}}</span>
-                    </div>
-                    
-                </div>
+{{#each builds}}
+<div class="heroes_build">
+    <div class="heroes_build_header">
+        <h3 class="toc_no_parsing">{{name}}</h3>
+        {{!-- This needs to be fixed --}}
+        <span class="heroes_build_tag heroes_build_tag_recommended">
+            <span>Recommended</span>
+            <span class="heroes_build_tag_image"></span>
+        </span>
+        {{!-- ############################ --}}
+    </div>
+    <div class="heroes_build_talents">
+        {{#each talents}}
+        <div class="heroes_build_talent_tier">
+            <span class="heroes_build_talent_tier_subtitle">{{available_at}}</span>
+            {{!-- This needs to be fixed --}}
+            <span class="heroes_build_talent_tier_visual">
+                {{#each talent_tier_visual}}
+                {{#if isVisible}}
+                <span class="heroes_build_talent_tier_yes"></span>
+                {{else}}
+                <span class="heroes_build_talent_tier_no"></span>
+                {{/if}}
                 {{/each}}
+            </span>
+            {{!-- ############################ --}}
+            <div class="tooltip">
+                <img src={{icon}} alt={{name}}>
+                <p>{{name}}</p>
+                <span class="tooltiptext">{{description}}</span>
             </div>
-        </div>
-    {{/each}}
 
-    {{else}}
-        <p>No builds have been made for this character yet</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{/each}}
+
+{{else}}
+<p>No builds have been made for this character yet</p>
 {{/if}}
 
 
 
-    <div class="main-layout">
-        <h1> Reviews </h1>
-        {{#if session.isLoggedIn}}
-        <a href="/hero/{{hero.name}}/review">Add new Review</a>
-        {{else}}
-        <a href="/accounts/sign-in"> Log in to write a Review</a>
-        {{/if}}
+<div class="main-layout">
+    <h1> Reviews </h1>
+    {{#if session.isLoggedIn}}
+    <a href="/hero/{{hero.name}}/review">Add new Review</a>
+    {{else}}
+    <a href="/accounts/sign-in"> Log in to write a Review</a>
+    {{/if}}
 
-        {{#if hasDatabaseError}}
-        <p>Couldn't fetch the reviews at the moment, try again later.</p>
-        {{else}}
+    {{#if hasDatabaseError}}
+    <p>Couldn't fetch the reviews at the moment, try again later.</p>
+    {{else}}
 
-        {{#if reviews.length}}
+    {{#if reviews.length}}
 
-        {{#each reviews}}
-        <article>
-            <h2>{{name}}</h2>
-            <h3>Rating: {{rating}} out of 5</h3>
-            <p>Description: {{description}}</p>
-        </article>
-        {{/each}}
+    {{#each reviews}}
+    <article>
+        <h2>{{name}}</h2>
+        <h3>Rating: {{rating}} out of 5</h3>
+        <p>Description: {{description}}</p>
+    </article>
+    {{#if (eq request.session.user_id review.authorId)}}
+    <a href="/hero/{{hero.name}}/review">Change the review</a>
+    {{/if}}
 
-        {{else}}
-        <p>There are no Reviews yet, please write one.</p>
-        {{/if}}
 
-        {{/if}}
 
-    </div>
+    {{/each}}
+
+    {{else}}
+    <p>There are no Reviews yet, please write one.</p>
+    {{/if}}
+
+    {{/if}}
+
+</div>
 </div>

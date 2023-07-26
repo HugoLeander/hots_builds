@@ -4,24 +4,24 @@ const jwt = require("jsonwebtoken")
 
 const secretKey = 'kattunge' // måste vara samma secret key för encrypt och decrypt därav en constant 
 
-module.exports = function ({ accountManager, heroManager, reviewManager, buildManager}) {
+module.exports = function ({ accountManager, heroManager, reviewManager, buildManager }) {
 
     //verifyToken middleware function
     function verifyToken(request, response, next) {
         //Get auth header value
         const bearerHeader = request.headers['authorization']
         //Kollar om bearer är undefined
-        if(typeof bearerHeader != 'undefined') {
+        if (typeof bearerHeader != 'undefined') {
             //Split at the space, the string looks like this "Bearer XXX" where XXX is the token
             const bearer = bearerHeader.split(' ')
             //hämta token ifrån split Arrayen, "Bearer" blir på [0], XXX på [1]
             const bearerToken = bearer[1]
             //Verify the token
             jwt.verify(bearerToken, secretKey, function (error, authData) { // här skickas token och secretKey med och kollar så det stämmer.
-                if(error) {
+                if (error) {
                     response.sendStatus(403)
                 } else {
-                    request.body.userInfo = authData 
+                    request.body.userInfo = authData
                     next()
                 }
             })
@@ -39,22 +39,22 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
 
     router.use(function (request, response, next) {
         response.setHeader("Access-Control-Allow-Origin", "*")
-	    response.setHeader("Access-Control-Allow-Methods", "*")
-	    response.setHeader("Access-Control-Allow-Headers", "*")
-	    response.setHeader("Access-Control-Expose-Headers", "*")
+        response.setHeader("Access-Control-Allow-Methods", "*")
+        response.setHeader("Access-Control-Allow-Headers", "*")
+        response.setHeader("Access-Control-Expose-Headers", "*")
 
-        if(request.method == "OPTIONS"){
+        if (request.method == "OPTIONS") {
             return response.status(200).end()
         }
 
         next()
-    }) 
+    })
 
     router.get("/accounts", verifyToken, function (request, response) {
-        if(request.body.userInfo.is_admin) {
+        if (request.body.userInfo.is_admin) {
             accountManager.getAllAccounts(function (errors, accounts) {
                 if (errors.length > 0) {
-                    response.status(400).json(errors)
+                    response.status(400).json({ error: "An error occured when trying to get all accounts"})
                 } else {
                     response.status(200).json(accounts)
                 }
@@ -74,9 +74,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
             confirm_password: request.body.confirm_password
         }
 
-        accountManager.createAccount(newAccount, function(errors, account) {
+        accountManager.createAccount(newAccount, function (errors, account) {
             if (errors.length > 0) {
-                response.status(400).json(errors)
+                response.status(400).json({ error: "An error occured when trying to create the account"})
             } else {
                 response.setHeader("Location", "/" + account)
                 response.status(201).json("account was created")
@@ -86,9 +86,9 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
 
     router.get("/heroes", function (request, response) {
 
-        heroManager.getAllHeroes(function(errors, heroes){
-            if(errors.lenght > 0){
-                response.status(400).json(errors)
+        heroManager.getAllHeroes(function (errors, heroes) {
+            if (errors.lenght > 0) {
+                response.status(400).json({ error: "An error occured when trying to fetch all heroes"})
 
             } else {
                 response.status(200).json(heroes)
@@ -96,32 +96,32 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
         })
     })
 
-    router.get('/hero/:hero_name', async function(request, response){
+    router.get('/hero/:hero_name', async function (request, response) {
 
         const name = request.params.hero_name
 
-        heroManager.getHeroByName(name, function(errors, hero){ 
-            if(errors.length > 0) {
-                response.status(400).json(errors)
+        heroManager.getHeroByName(name, function (errors, hero) {
+            if (errors.length > 0) {
+                response.status(400).json({ error: "An error occured when trying to fetch the hero"})
             } else {
                 response.status(200).json(hero)
-            } 
+            }
         })
     })
-    
 
-    router.get('/build/:hero_name', async function(request, response){
+
+    router.get('/build/:hero_name', async function (request, response) {
 
         const name = request.params.hero_name
 
-        buildManager.getBuildsByHeroName(name, function(errors, foundBuilds){
-            if(errors.length > 0) {
-                response.status(400).json(errors)
+        buildManager.getBuildsByHeroName(name, function (errors, foundBuilds) {
+            if (errors.length > 0) {
+                response.status(400).json({ error: "An error occured when trying to get all builds for hero"})
             } else {
                 //returns the talents of the first build of a hero
                 const build = []
 
-                for(const talent of foundBuilds[0].talents) {
+                for (const talent of foundBuilds[0].talents) {
                     build.push(talent)
                 }
 
@@ -130,8 +130,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
         })
     })
 
-    router.post('/createBuild', verifyToken, async function(request, response){
-        console.log(request.body)
+    router.post('/createBuild', verifyToken, async function (request, response) {
         const newBuild = {
             hero_name: request.body.hero_name,
             talents: request.body.talents,
@@ -139,12 +138,12 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
             build_description: request.body.build_description
         }
 
-        buildManager.createBuild(request, newBuild, async function(errors, build, authorized){
-            if(!authorized) {
+        buildManager.createBuild(request, newBuild, async function (errors, build, authorized) {
+            if (!authorized) {
                 response.sendStatus(403)
             }
-            else if(errors.length > 0) {
-                response.status(400).json(errors)
+            else if (errors.length > 0) {
+                response.status(400).json({ error: "An error occured when trying to create the build"})
             } else {
                 response.status(200).json(build)
             }
@@ -160,13 +159,13 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
                 password: request.body.password,
                 confirm_password: request.body.confirm_password
             }
-    
+
             accountManager.updateAccountInformation(newInfo, function (errors, account) {
-                if(!account) {
+                if (!account) {
                     response.status(404).end()
                 } else {
-                    if(errors.lenght > 0) {
-                        response.status(401).json(errors)
+                    if (errors.lenght > 0) {
+                        response.status(401).json({ error: "An error occured when trying to update the account"})
                     } else {
                         response.status(204).end("account")
                     }
@@ -180,46 +179,46 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
     router.post("/login", function (request, response) {
         const grant_type = request.body.grant_type
 
-        if(grant_type == "password") {
+        if (grant_type == "password") {
 
             const user = {
                 username: request.body.username,
                 password: request.body.password
             }
-        
-            accountManager.loginAccount(user, function(error, userGotBack) {
-                if(userGotBack) {   
-                        const payload = {
-                            id: userGotBack.id,
-                            username: userGotBack.username,
-                            is_admin: userGotBack.is_admin, 
-                            is_logged_in: true
-                        }
 
-                        jwt.sign(payload, secretKey, function (error, token) { // här blir man tilldelad en token
-                            if(error){
-                                console.log(error) 
-                                response.status(401).json("Invalid client error")
-                            } else {
-                                response.status(200).json({
-                                    "access_token": token,
-                                    id: userGotBack.id,
-                                    is_admin: userGotBack.is_admin
-                                }) 
-                            }
-                        })
-            }
-            else {
-                response.status(401).json(error)
-            }
-        })
+            accountManager.loginAccount(user, function (error, userGotBack) {
+                if (userGotBack) {
+                    const payload = {
+                        id: userGotBack.id,
+                        username: userGotBack.username,
+                        is_admin: userGotBack.is_admin,
+                        is_logged_in: true
+                    }
+
+                    jwt.sign(payload, secretKey, function (error, token) { // här blir man tilldelad en token
+                        if (error) {
+                            console.log({ error: "An error occured when trying to login"})
+                            response.status(401).json("Invalid client error")
+                        } else {
+                            response.status(200).json({
+                                "access_token": token,
+                                id: userGotBack.id,
+                                is_admin: userGotBack.is_admin
+                            })
+                        }
+                    })
+                }
+                else {
+                    response.status(401).json(error)
+                }
+            })
         }
         else {
-            response.status(400).json({ error: "unspported_grant_type"})
+            response.status(400).json({ error: "unspported_grant_type" })
         }
     })
 
-    router.get("/:id", verifyToken, function (request, response) { 
+    router.get("/:id", verifyToken, function (request, response) {
 
         const id = request.params.id
 
@@ -227,7 +226,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
 
             accountManager.getAllAccounts(function (errors, accounts) {
                 if (errors.length > 0) {
-                    response.status(400).json(errors)
+                    response.status(400).json({ error: "An error occured when trying to get the account by id"})
                 } else {
                     const account = accounts.find(a => a.id == id)
 
@@ -247,124 +246,31 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
 
         const id = request.params.id
 
-        accountManager.deleteAccountById(request, id, function(errors, authorized){
+        accountManager.deleteAccountById(request, id, function (errors, authorized) {
             if (!authorized) {
                 response.sendStatus(403)
             }
-            else if(errors > 0){
-                response.status(400).json(errors)
+            else if (errors > 0) {
+                response.status(400).json({ error: "An error occured when trying to delete the account"})
             } else {
                 response.status(204).end()
             }
         })
     })
-    
-    router.post("/review", verifyToken, function(request, response) {
 
-        const newReview = {
-            hero_name: request.body.hero_name,
-            name: request.body.name,
-            rating: request.body.rating,
-            description: request.body.description,
-            author_account_id: request.body.userInfo.account_id
-        }
 
-        reviewManager.createReview(newReview, function(errors, review, authorized) {
-            if (!authorized) {
-                response.sendStatus(403)
-            }
-            else if(errors.length > 0) {
-                console.log(errors)
-                response.status(400).json(errors)
-            } else {
-                console.log("created review")
-                response.status(200).json(review)
-            }
-        })
-    })
+    const reviewController = require('./reviewController');
 
-    router.get("/review/:id", function(request, response) {
+    router.post('/review', verifyToken, reviewController.createReview);
 
-        const review_id = request.params.id
+    router.get('/review/:id', reviewController.getReviewById);
 
-        reviewManager.getReviewById(review_id, function(errors, review) {
-            if (errors.length > 0) {
-                response.status(400).json(errors)
-            } else {
-                if (review) {
-                    response.status(200).json(review)
-                } else {
-                    response.status(404).end()
-                }
-            }
-        })
-    })
+    router.get('/reviews/:id', reviewController.getReviewsByHeroId);
 
-    router.put("/review/:id", verifyToken, function(request, response) {
+    router.put('/review/:id', verifyToken, reviewController.updateReview);
 
-        const newInfo = {
-            review_id: request.params.id,
-            hero_name: request.body.hero_name,
-            name: request.body.name,
-            rating: request.body.rating,
-            description: request.body.description
-        }
+    router.delete('/review/:id', verifyToken, reviewController.deleteReviewById);
 
-        reviewManager.updateReview(request, newInfo, function(errors, review, authorized){
-            if(!review){
-                response.status(404).end()
-            } else if (!authorized){
-                response.sendStatus(403)
-            } else if(errors.length > 0) {
-                response.status(400).json(errors)
-            } else {
-                response.status(204).end() 
-            }
-        })
-    })
-    
-    router.delete("/review/:id", verifyToken, function(request, response) {
 
-        const review_id = request.params.id
-        reviewManager.getReviewById(review_id, function(errors, review) {
-            if (!review) {
-                response.status(404).end()
-            } else {
-                if (errors.length > 0) {
-                    response.status(400).json(errors)
-                } else {
-                    if (request.body.userInfo.id == review_id || request.body.userInfo.is_admin) {
-                        reviewManager.deleteReviewById(review_id, function(errors) {
-                            if(errors.length > 0){
-                                response.status(400).json(errors)
-                            } else {
-                                response.status(204).end()
-                            }
-                        })
-                    } else {
-                        response.sendStatus(403)
-                    } 
-                }
-            }
-        })
-    })
-
-    router.get("/reviews/:id", function(request, response) {
-        console.log("test")
-        const id = request.params.id
-
-        reviewManager.getAllReviewsByAuthorId(id, function(error, reviews) {
-            if (error.length > 0) {
-                response.status(400).json(error)
-            } else {
-                if (reviews) {
-                    response.status(200).json(reviews)
-                } else {
-                    response.status(404).end()
-                }
-            }
-        })
-    })
-
-    return router
+return router
 }

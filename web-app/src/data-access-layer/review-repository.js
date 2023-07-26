@@ -6,19 +6,19 @@ module.exports = function({db}) {
         
             db.dbConnection.query(query, values, function(error, reviews){
                 if(error) {
-                    callback(['databaseError'], null)
+                    callback(['errorFetchingAllReviews'], null)
                 } else {
                     callback([], reviews)
                 }
             })
         },
         
-        getAllReviewsByName: function(hero_name, callback){
+        getAllReviewsByHeroName: function(hero_name, callback){
             const query = "SELECT * FROM reviews WHERE hero_name = ?"
             const values = [hero_name]
             db.dbConnection.query(query, values, function(error, reviews){
                 if(error) {
-                    callback(['databaseError'], null)
+                    callback(['errorGettingAllReviewsForSpecificHero'], null)
                 } else {
                     callback([], reviews)
                 }
@@ -32,7 +32,7 @@ module.exports = function({db}) {
         
             db.dbConnection.query(query, values, function (error, newReview) {
                 if (error) {
-                    callback(['databaseError'], null)
+                    callback(['errorCreatingReview'], null)
                 } else {
                     callback([], newReview)
                 }
@@ -44,7 +44,7 @@ module.exports = function({db}) {
             const values = [id]
             db.dbConnection.query(query, values, function(error, review){
                 if(error) {
-                    callback(['databaseError'], null)
+                    callback(['errorFetchingReviewById'], null)
                 } else {
                     callback([], review)
                 }
@@ -56,10 +56,8 @@ module.exports = function({db}) {
         
             db.dbConnection.query(query, values, function (error, newInfo) {
                 if (error) {
-                    console.log("error i databasen")
-                    callback(['databaseError'], null)
+                    callback(['errorUpdatingReview'], null)
                 } else {
-                    console.log("Uppdaterade!")
                     callback([], newInfo)
                 }
             })
@@ -71,7 +69,7 @@ module.exports = function({db}) {
         
             db.dbConnection.query(query, values, function (error, review) {
                 if (error) {
-                    callback(['databaseError'])
+                    callback(['errorDeletingReview'])
                 } else {
                     callback([])
                 }

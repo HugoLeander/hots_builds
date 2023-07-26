@@ -14,7 +14,7 @@ module.exports = function({models}) {
                 callback(['databaseError'], null)
             }
         },
-        getAllReviewsByName: async function(heroesName, callback){
+        getAllReviewsByHeroName: async function(heroesName, callback){
 
             try {
                 const result = await models.review.findAll({

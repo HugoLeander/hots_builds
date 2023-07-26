@@ -11,7 +11,7 @@ module.exports = function({reviewManager, heroManager, buildManager}) {
 
         heroManager.getHeroByName(name, function(hero_errors, hero){
             buildManager.getBuildsByHeroName(name, function(build_errors, builds){
-                reviewManager.getAllReviewsByName(name, function(review_errors, reviews) {
+                reviewManager.getAllReviewsByHeroName(name, function(review_errors, reviews) {
                     const errors = hero_errors
                     errors.push(review_errors)
                     errors.push(build_errors)
