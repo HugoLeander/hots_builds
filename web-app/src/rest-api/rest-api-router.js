@@ -259,7 +259,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
     })
 
 
-    const reviewController = require('./reviewController');
+    const reviewController = require('./reviewController')({ reviewManager });
 
     router.post('/review', verifyToken, reviewController.createReview);
 

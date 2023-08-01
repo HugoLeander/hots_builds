@@ -26,21 +26,7 @@ module.exports = function({reviewRepository}) {
 				console.log("error max length")
 			}
 
-			if(errors.length > 0) {
-				callback(errors, null)
-			} else {
-				reviewRepository.createReview(newReview, function(error, newReview){
-		
-					if(error){
-						console.log(error)
-						callback(error, null)
-					}
-					else {
-						console.log("skickade till repository")
-						callback([], newReview)
-					}
-				})
-			}
+			callback(errors, null);
 			
 		},
 		getErrorsNewInfo: function(newInfo, callback){

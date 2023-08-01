@@ -1,66 +1,71 @@
-module.exports = function({reviewRepository, reviewValidator}) {
+module.exports = function ({ reviewRepository, reviewValidator }) {
 
 	return {
-		getAllReviews: function(callback){
+		getAllReviews: function (callback) {
 			reviewRepository.getAllReviews(callback)
 		},
-		
-		getAllReviewsByHeroName: function(name, callback){
+
+		getAllReviewsByHeroName: function (name, callback) {
 			reviewRepository.getAllReviewsByHeroName(name, callback)
 		},
-		
-		createReview: function(request, newReview, callback){
-			if(request.session.isLoggedIn) {
-				reviewValidator.getErrorsNewReview(newReview, function(error, review) {
-					if(error) {
-						console.log(`Error creating review: ${error}`);
-						callback(['An error occured when creating a review'], null);
+
+		createReview: function (isLoggedIn, newReview, callback) {
+			if (isLoggedIn) {
+				reviewValidator.getErrorsNewReview(newReview, function (errors, review) {
+					if (errors.length > 0) {
+						console.log(`Error creating review: ${errors}`);
+						callback(['An error occurred when creating a review'], null);
 					} else {
-						
-						callback([], review, true)
+						reviewRepository.createReview(newReview, function (errors, createdReview) {
+							if (errors.length > 0) {
+								callback(['An error occurred when creating a review'], null);
+							} else {
+								callback([], createdReview, true);
+							}
+						});
 					}
-				})	
+				});
 			} else {
-				callback(['Unauthorized'], null, false)
+				callback(['Unauthorized'], null, false);
 			}
 		},
 
-		getReviewById: function(reviewId, callback){
-            reviewRepository.getReviewById(reviewId, callback)
-        },
+		getReviewById: function (reviewId, callback) {
+			reviewRepository.getReviewById(reviewId, callback)
+		},
 
-		getAllReviewsByAuthorId: function(authorId, callback) {
+		getAllReviewsByAuthorId: function (authorId, callback) {
 			reviewRepository.getAllReviewsByAuthorId(authorId, callback)
 		},
 
-        updateReview: function (request, newInfo, callback) {
-			reviewRepository.getReviewById(request.params.id, function(error, review) {
-				if(error) {
-					callback(error, null, false)
+		updateReview: function (request, newInfo, callback) {
+			reviewRepository.getReviewById(request.params.id, function (errors, review) {
+				if (errors.length > 0) {
+					callback(errors, null, false)
 				} else {
-					if((request.session.user_id == review.authorId || request.body.userInfo.is_admin) && request.session.isLoggedIn) {
-						reviewValidator.getErrorsNewInfo(newInfo, function(errors) {
-							if(errors.length > 0) {
+					if ((request.session.user_id == review.authorId || request.body.userInfo.is_admin) && request.session.isLoggedIn) {
+						reviewValidator.getErrorsNewInfo(newInfo, function (errors) {
+							if (errors.length > 0) {
 								callback(['An error occured in review validator when updating a review'], null, false);
 							} else {
-								accountRepository.updateReview(newInfo, function(error, newInfo){ 
-									if(error){
-										console.log(`Error updating review: ${error}`);
+								accountRepository.updateReview(newInfo, function (errors, newInfo) {
+									if (errors.length > 0) {
+										console.log(`Error updating review: ${errors}`);
 										callback(['An error occured when updating a review'], null);
 									} else {
 										callback([], newInfo, true)
 									}
 								})
 							}
-						}) 
+						})
 					} else {
 						callback(['Unauthorized'], null, false)
 					}
 				}
 			})
-        },
+		},
 
-        deleteReviewById: function (id, callback) {
+		deleteReviewById: function (id, callback) {
 			reviewRepository.deleteReviewById(id, callback)
 		}
 	}
