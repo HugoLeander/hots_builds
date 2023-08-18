@@ -9,12 +9,16 @@ module.exports = function ({ reviewManager }) {
             author_account_id: request.body.userInfo.account_id
         };
 
-        try {
-            const review = await reviewManager.createReview(newReview);
-            response.status(201).json(review);
-        } catch (error) {
-            response.status(400).json({ error: "An error occured when trying to create the review" });
-        }
+        reviewManager.createReview(isLoggedIn, newReview, (errors, review, success) => {
+            if (errors.length > 0) {
+                return response.status(400).json({ error: errors.join(", ") });
+            }
+            if (success) {
+                response.status(201).json(review);
+            } else {
+                response.status(403).json({ error: "Unauthorized" });
+            }
+        });
     },
 
     updateReview: async function(request, response) {

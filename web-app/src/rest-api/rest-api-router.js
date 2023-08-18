@@ -250,7 +250,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
             if (!authorized) {
                 response.sendStatus(403)
             }
-            else if (errors > 0) {
+            else if (errors.length > 0) {
                 response.status(400).json({ error: "An error occured when trying to delete the account"})
             } else {
                 response.status(204).end()
@@ -259,7 +259,7 @@ module.exports = function ({ accountManager, heroManager, reviewManager, buildMa
     })
 
 
-    const reviewController = require('./reviewController')({ reviewManager });
+    const reviewController = require('./review-controller')({ reviewManager });
 
     router.post('/review', verifyToken, reviewController.createReview);
 

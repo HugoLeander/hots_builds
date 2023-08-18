@@ -14,11 +14,11 @@ module.exports = function ({ reviewRepository, reviewValidator }) {
 				reviewValidator.getErrorsNewReview(newReview, function (errors, review) {
 					if (errors.length > 0) {
 						console.log(`Error creating review: ${errors}`);
-						callback(['An error occurred when creating a review'], null);
+						callback([errors], null);
 					} else {
 						reviewRepository.createReview(newReview, function (errors, createdReview) {
 							if (errors.length > 0) {
-								callback(['An error occurred when creating a review'], null);
+								callback([errors], null);
 							} else {
 								callback([], createdReview, true);
 							}

@@ -12,17 +12,17 @@ module.exports = function({reviewRepository}) {
 			console.log(newReview)
 			// Validate username.  
 			if(!newReview.hasOwnProperty("name")){
-				errors.push("name is Missing")
+				errors.push("Name is Missing")
 			}
 			if(!newReview.hasOwnProperty("hero_name")){
-				errors.push("heroes name is Missing")
+				errors.push("Heroes name is Missing")
 			}
 			if(newReview.name.length < MIN_NAME_LENGTH){
-				errors.push("name is Too Short, min is 3 characters")
+				errors.push("Name is Too Short, min is 3 characters")
 				console.log("error min length")
 			}
 			else if(MAX_NAME_LENGTH < newReview.name.length){
-				errors.push("name is Too Long, max is 20 characters")
+				errors.push("Name is Too Long, max is 20 characters")
 				console.log("error max length")
 			}
 
@@ -32,17 +32,17 @@ module.exports = function({reviewRepository}) {
 		getErrorsNewInfo: function(newInfo, callback){
 			const errors = []
 			if(!newInfo.hasOwnProperty("name")){
-				errors.push("name is Missing")
+				errors.push("Name is Missing")
 			}
 			if(!newInfo.hasOwnProperty("heroesName")){
-				errors.push("heroes name is Missing")
+				errors.push("Heroes name is Missing")
 			}
 			if(newInfo.name.length < MIN_NAME_LENGTH){
-				errors.push("name is Too Short, min is 3 characters")
+				errors.push("Name is Too Short, min is 3 characters")
 				console.log("error min length")
 			}
 			else if(MAX_NAME_LENGTH < newInfo.name.length){
-				errors.push("name is Too Long, max is 20 characters")
+				errors.push("Name is Too Long, max is 20 characters")
 				console.log("error max length")
 			}
 			

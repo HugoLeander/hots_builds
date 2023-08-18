@@ -46,11 +46,12 @@ module.exports = function({reviewManager, heroManager, buildManager}) {
 
     router.post("/:hero_name/review", function(request, response){
 
+        const name = request.params.hero_name
+
         if(!request.session.isLoggedIn) {
             response.redirect("/hero/" + name)
         }
         
-        const name = request.params.hero_name
         console.log("logged in user id is:")
         console.log(request.session.user_id)
 
@@ -62,19 +63,17 @@ module.exports = function({reviewManager, heroManager, buildManager}) {
             author_account_id: request.session.user_id
         };
         
-        reviewManager.createReview(request, newReview, function(errors, review, authorized){
+        reviewManager.createReview(request, newReview, function(errors, review){
             const model = {
-                errors: errors
+                errors: errors     
             }
-            if(!authorized) {
+            if(!request.session.isLoggedIn) {
                 console.log("Unauthorized")
                 response.redirect("/sign-in")
             }
-            else if(errors.lenght > 0){
-                console.log(errors)
+            else if(errors && errors.length > 0){
                 response.render('create-review.hbs', model)
             } else {
-                console.log(review)
                 response.redirect("/hero/" + name)
             }
         })

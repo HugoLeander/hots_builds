@@ -67,14 +67,9 @@
         <h3>Rating: {{rating}} out of 5</h3>
         <p>Description: {{description}}</p>
     </article>
-    {{#if (eq request.session.user_id review.authorId)}}
-    <a href="/hero/{{hero.name}}/review">Change the review</a>
-    {{/if}}
-
-
-
+   
     {{/each}}
-
+    
     {{else}}
     <p>There are no Reviews yet, please write one.</p>
     {{/if}}
